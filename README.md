@@ -86,7 +86,7 @@ se publican con el aviso "de ejemplo". Cuando la información real esté cargada
 
 ## Pendientes antes de dar el sitio por terminado
 
-- [ ] **Número de WhatsApp** real (`business.ts` → `whatsapp`). Hoy está en `null`: los botones de WhatsApp están ocultos.
+- [x] Número de WhatsApp (+57 310 3831420).
 - [ ] Dirección exacta, enlace de Google Maps y coordenadas (hoy son supuestos).
 - [ ] Horarios reales (hoy son supuestos: martes a domingo).
 - [ ] Carta real: categorías, productos y precios (reemplazar los `demo: true`).

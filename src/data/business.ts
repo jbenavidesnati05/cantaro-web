@@ -43,7 +43,7 @@ export const business: Business = {
   url: 'https://cantaroarte.com',
   email: 'hola@cantaroarte.com',
   socialEmail: 'redes@cantaroarte.com',
-  whatsapp: null, // PENDIENTE — número real (formato 57XXXXXXXXXX). null oculta todos los botones de WhatsApp
+  whatsapp: '573103831420', // +57 310 3831420 (confirmado por el dueño)
   address: {
     street: 'Centro, cerca al parque principal', // SUPUESTO — dirección exacta pendiente
     locality: 'Sibundoy',
