@@ -4,17 +4,22 @@ import BaseLayout from './BaseLayout.astro';
 import SiteHeader from '@/components/layout/SiteHeader.astro';
 import SiteFooter from '@/components/layout/SiteFooter.astro';
 import WhatsAppFab from '@/components/layout/WhatsAppFab.astro';
+import Loader from '@/components/layout/Loader.astro';
 
 interface Props {
   title?: string;
   description?: string;
   image?: string;
   noindex?: boolean;
+  /** Pantalla de carga de la taza (solo la portada). */
+  loader?: boolean;
 }
+const { loader = false, ...seo } = Astro.props;
 ---
 
-<BaseLayout {...Astro.props}>
+<BaseLayout {...seo}>
   <slot name="head" slot="head" />
+  {loader && <Loader />}
   <SiteHeader />
   <main id="contenido">
     <slot />

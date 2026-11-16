@@ -52,7 +52,7 @@ const jsonLd = {
 };
 ---
 
-<PageLayout>
+<PageLayout loader>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <Hero nextWorkshop={workshops[0]} />
   <Marquee />

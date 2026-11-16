@@ -1,0 +1,30 @@
+---
+/**
+ * Divide un texto en letras al generar la página (sin JS, sin parpadeo).
+ * El contenedor debe tener la clase `is-split` y un aria-label con el texto completo.
+ * `start` continúa el retraso escalonado si el título se arma con varios tramos.
+ */
+interface Props {
+  text: string;
+  start?: number;
+}
+const { text, start = 0 } = Astro.props;
+let i = start;
+const words = text.split(/(\s+)/).map((w) => (/^\s+$/.test(w) || !w ? { space: true, chars: [] } : { space: false, chars: [...w].map((c) => ({ c, i: i++ })) }));
+---
+
+{
+  words.map((w) =>
+    w.space ? (
+      ' '
+    ) : (
+      <span class="split-word" aria-hidden="true">
+        {w.chars.map((ch) => (
+          <span class="split-char" style={`--i:${ch.i}`}>
+            {ch.c}
+          </span>
+        ))}
+      </span>
+    ),
+  )
+}

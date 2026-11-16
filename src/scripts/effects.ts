@@ -2,7 +2,7 @@
  * Efectos de la portada, sin dependencias.
  * Todo se desactiva con prefers-reduced-motion (el contenido queda visible y estático).
  *
- *  [data-split]          → el texto entra letra por letra (accesible: aria-label con el texto original)
+ *  (El texto letra por letra se genera en el build con components/brand/SplitText.astro.)
  *  [data-parallax="0.2"] → desplazamiento vertical según el scroll (positivo = más lento)
  *  [data-pour]           → escena fija ligada al scroll: expone --tilt, --stream, --fill, --steam y data-step
  *  [data-swap]           → historia: el texto activo cambia la imagen fija de al lado
@@ -12,42 +12,6 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const clamp = (v: number, min = 0, max = 1) => Math.min(max, Math.max(min, v));
 /** Mapea p del rango [a, b] a [0, 1]. */
 const range = (p: number, a: number, b: number) => clamp((p - a) / (b - a));
-
-// ── Texto letra por letra ────────────────────────────────────────────────
-function splitText(el: HTMLElement) {
-  el.setAttribute('aria-label', el.textContent?.replace(/\s+/g, ' ').trim() ?? '');
-  let i = 0;
-  const walk = (node: Node) => {
-    for (const child of [...node.childNodes]) {
-      if (child.nodeType === Node.TEXT_NODE) {
-        const frag = document.createDocumentFragment();
-        for (const word of (child.textContent ?? '').split(/(\s+)/)) {
-          if (!word) continue;
-          if (/^\s+$/.test(word)) {
-            frag.append(' ');
-            continue;
-          }
-          const w = document.createElement('span');
-          w.className = 'split-word';
-          w.setAttribute('aria-hidden', 'true');
-          for (const ch of word) {
-            const c = document.createElement('span');
-            c.className = 'split-char';
-            c.style.setProperty('--i', String(i++));
-            c.textContent = ch;
-            w.append(c);
-          }
-          frag.append(w);
-        }
-        child.replaceWith(frag);
-      } else if (child.nodeType === Node.ELEMENT_NODE) {
-        walk(child);
-      }
-    }
-  };
-  walk(el);
-  el.classList.add('is-split');
-}
 
 // ── Bucle de scroll compartido ───────────────────────────────────────────
 type Tick = () => void;
@@ -109,7 +73,6 @@ function swap(root: HTMLElement) {
 
 // ── Inicio ───────────────────────────────────────────────────────────────
 if (!reduce) {
-  document.querySelectorAll<HTMLElement>('[data-split]').forEach(splitText);
   const px = [...document.querySelectorAll<HTMLElement>('[data-parallax]')];
   if (px.length) parallax(px);
   document.querySelectorAll<HTMLElement>('[data-pour]').forEach(pour);

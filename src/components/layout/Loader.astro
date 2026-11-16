@@ -1,0 +1,203 @@
+---
+/**
+ * Pantalla de carga: una taza de cerámica se llena de café y luego se descubre la página.
+ * - Solo se usa en la portada (nunca en /menu: el QR debe abrir la carta al instante).
+ * - Una vez por sesión; se omite con prefers-reduced-motion.
+ * - Mínimo ~2 s, máximo 4,5 s; si el JS falla, una animación CSS la retira sola.
+ * - Mientras está visible, <html> lleva .is-loading y las animaciones de entrada esperan.
+ */
+---
+
+<div class="loader" data-loader role="status" aria-live="polite">
+  <div class="loader-inner">
+    <svg viewBox="0 0 200 200" class="loader-cup" aria-hidden="true">
+      <defs>
+        <clipPath id="loader-cup-in"><path d="M48 86h96v38a44 44 0 0 1-44 44h-8a44 44 0 0 1-44-44z" /></clipPath>
+      </defs>
+      <!-- chorro -->
+      <rect class="loader-stream" x="95" y="0" width="7" height="150" rx="3.5" fill="#C98A5B" />
+      <!-- vapor -->
+      <g class="loader-steam" fill="none" stroke="#E9A27A" stroke-width="5" stroke-linecap="round">
+        <path d="M84 70c-10-12 8-18 0-32s8-16 3-26" />
+        <path d="M112 70c-10-12 8-18 0-32s8-16 3-26" />
+      </g>
+      <!-- platillo -->
+      <ellipse cx="96" cy="176" rx="74" ry="9" fill="#D2652A" />
+      <ellipse cx="96" cy="172" rx="58" ry="5" fill="#9E4A1C" />
+      <!-- asa -->
+      <path d="M148 98h8a18 18 0 0 1 0 36h-12" fill="none" stroke="#F1E2C8" stroke-width="9" />
+      <!-- taza -->
+      <path d="M42 80h108v44a50 50 0 0 1-50 50h-8a50 50 0 0 1-50-50z" fill="#FFFDF8" />
+      <g clip-path="url(#loader-cup-in)">
+        <g class="loader-fill">
+          <rect x="40" y="84" width="112" height="90" fill="#5B3A21" />
+          <path class="loader-wave" d="M-40 86q15-6 30 0t30 0 30 0 30 0 30 0 30 0 30 0 30 0 30 0v6h-270z" fill="#C98A5B" />
+        </g>
+      </g>
+      <g fill="#6E9E2E">
+        <path d="M62 140c4-6 10-6 13 0-4 6-10 6-13 0z" /><path d="M84 144c4-6 10-6 13 0-4 6-10 6-13 0z" />
+        <path d="M106 144c4-6 10-6 13 0-4 6-10 6-13 0z" /><path d="M128 140c4-6 10-6 13 0-4 6-10 6-13 0z" />
+      </g>
+      <ellipse cx="96" cy="81" rx="54" ry="6" fill="none" stroke="#F1E2C8" stroke-width="4" />
+    </svg>
+
+    <p class="loader-brand font-display">Cántaro</p>
+    <p class="loader-text">Preparando tu café<span class="loader-dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span></p>
+  </div>
+</div>
+
+<script is:inline>
+  // Se ejecuta antes de pintar el resto de la página: decide si mostrar el loader (sin parpadeo).
+  (function () {
+    var d = document.documentElement;
+    var seen = false;
+    try { seen = sessionStorage.getItem('cantaro-loader') === '1'; } catch (e) {}
+    if (seen || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      d.classList.add('no-loader');
+      return;
+    }
+    try { sessionStorage.setItem('cantaro-loader', '1'); } catch (e) {}
+    d.classList.add('is-loading');
+    var start = performance.now();
+    var MIN = 2100, MAX = 4500, done = false;
+    function hide() {
+      if (done) return;
+      done = true;
+      var el = document.querySelector('[data-loader]');
+      if (el) el.classList.add('is-done');
+      d.classList.remove('is-loading');
+      setTimeout(function () { if (el) el.remove(); }, 900);
+    }
+    addEventListener('load', function () {
+      setTimeout(hide, Math.max(0, MIN - (performance.now() - start)));
+    });
+    setTimeout(hide, MAX);
+  })();
+</script>
+
+<style is:global>
+  .loader {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(50% 45% at 50% 45%, rgb(210 101 42 / 0.25), transparent 70%),
+      #2a1a0e;
+    color: var(--color-cream-50);
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 0.85s cubic-bezier(0.7, 0, 0.2, 1);
+    /* Respaldo sin JS: se retira sola a los 5 s */
+    animation: loader-failsafe 0.4s 5s forwards;
+  }
+  .no-loader .loader {
+    display: none;
+  }
+  .loader.is-done {
+    clip-path: inset(0 0 100% 0);
+  }
+  .loader.is-done .loader-inner {
+    transform: translateY(-40px) scale(0.92);
+    opacity: 0;
+  }
+  .loader-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition:
+      transform 0.7s cubic-bezier(0.7, 0, 0.2, 1),
+      opacity 0.5s;
+  }
+  .loader-cup {
+    width: 9.5rem;
+    height: 9.5rem;
+  }
+  .loader-stream {
+    transform-box: fill-box;
+    transform-origin: top;
+    animation: loader-stream 1.7s cubic-bezier(0.5, 0, 0.3, 1) forwards;
+  }
+  .loader-fill {
+    transform: translateY(88px);
+    animation: loader-fill 1.5s 0.25s cubic-bezier(0.45, 0, 0.25, 1) forwards;
+  }
+  .loader-wave {
+    animation: loader-wave 1s linear infinite;
+  }
+  .loader-steam {
+    opacity: 0;
+    animation: loader-steam 0.6s 1.6s ease-out forwards;
+  }
+  .loader-steam path {
+    stroke-dasharray: 60;
+    stroke-dashoffset: 60;
+    animation: loader-steam-draw 1.2s 1.6s ease-out forwards;
+  }
+  .loader-brand {
+    margin-top: 1.25rem;
+    font-size: 2.5rem;
+    line-height: 1;
+    color: var(--color-cream-50);
+    opacity: 0;
+    animation: loader-up 0.7s 0.3s ease-out forwards;
+  }
+  .loader-text {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.12em;
+    color: rgb(241 226 200 / 0.75);
+    opacity: 0;
+    animation: loader-up 0.7s 0.5s ease-out forwards;
+  }
+  .loader-dots span {
+    animation: loader-dot 1.2s infinite;
+  }
+  .loader-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .loader-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  /* Las animaciones de entrada de la portada esperan a que termine el loader */
+  .is-loading .hero-in,
+  .is-loading .hero-pop,
+  .is-loading .split-char {
+    /* !important: los componentes usan el shorthand `animation`, que reinicia play-state */
+    animation-play-state: paused !important;
+  }
+  .is-loading body {
+    overflow: hidden;
+  }
+
+  @keyframes loader-stream {
+    0% { transform: scaleY(0); opacity: 1; }
+    25% { transform: scaleY(1); }
+    80% { transform: scaleY(1); opacity: 1; }
+    100% { transform: scaleY(1) translateY(40px); opacity: 0; }
+  }
+  @keyframes loader-fill {
+    to { transform: translateY(14px); }
+  }
+  @keyframes loader-wave {
+    to { transform: translateX(60px); }
+  }
+  @keyframes loader-steam {
+    to { opacity: 1; }
+  }
+  @keyframes loader-steam-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes loader-up {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes loader-dot {
+    0%, 20% { opacity: 0; }
+    50%, 100% { opacity: 1; }
+  }
+  @keyframes loader-failsafe {
+    to { opacity: 0; visibility: hidden; }
+  }
+</style>

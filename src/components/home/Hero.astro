@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Icon from '@/components/brand/Icon.astro';
 import Beans from '@/components/brand/Beans.astro';
+import SplitText from '@/components/brand/SplitText.astro';
 import { business } from '@/data/business';
 import { formatDateParts } from '@/lib/format';
 import type { Workshop } from '@/lib/catalog';
@@ -26,8 +27,8 @@ const wsDate = nextWorkshop ? formatDateParts(nextWorkshop.date) : null;
         {business.address.locality}, {business.address.region}
       </p>
 
-      <h1 id="hero-title" class="mt-6 text-hero leading-[0.92] font-medium tracking-tight" data-split>
-        Un espacio de café y <em class="brush-underline font-normal text-clay-600">creación</em>
+      <h1 id="hero-title" class="is-split mt-6 text-hero leading-[0.92] font-medium tracking-tight" aria-label="Un espacio de café y creación">
+        <SplitText text="Un espacio de café y" />{' '}<em class="brush-underline font-normal text-clay-600"><SplitText text="creación" start={16} /></em>
       </h1>
 
       <p class="hero-in mt-8 max-w-xl text-lg leading-relaxed text-bark-600 sm:text-xl [--d:700ms]">
