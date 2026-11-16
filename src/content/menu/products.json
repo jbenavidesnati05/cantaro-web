@@ -1,0 +1,27 @@
+[
+  { "id": "tinto", "name": "Tinto", "description": "Café negro de la casa, suave y aromático.", "priceCOP": 2500, "categoryId": "cafes-calientes", "sortOrder": 1, "demo": true },
+  { "id": "americano", "name": "Americano", "description": "Espresso alargado con agua caliente.", "priceCOP": 4000, "categoryId": "cafes-calientes", "sortOrder": 2, "demo": true },
+  { "id": "cafe-con-leche", "name": "Café con leche", "description": "Café de la casa con leche espumada.", "priceCOP": 4500, "categoryId": "cafes-calientes", "sortOrder": 3, "demo": true },
+  { "id": "capuchino", "name": "Capuchino", "description": "Espresso, leche vaporizada y espuma cremosa.", "priceCOP": 7000, "categoryId": "cafes-calientes", "sortOrder": 4, "featured": true, "demo": true,
+    "variants": [ { "name": "Clásico", "priceCOP": 7000 }, { "name": "Con canela y panela", "priceCOP": 7500 } ] },
+  { "id": "mocaccino", "name": "Mocaccino", "description": "Espresso con chocolate y leche.", "priceCOP": 8500, "categoryId": "cafes-calientes", "sortOrder": 5, "demo": true },
+
+  { "id": "cafe-helado", "name": "Café helado", "description": "Café frío con hielo y un toque de panela.", "priceCOP": 7500, "categoryId": "cafes-frios", "sortOrder": 1, "demo": true },
+  { "id": "frappe-cafe", "name": "Frappé de café", "description": "Granizado de café con crema.", "priceCOP": 11000, "categoryId": "cafes-frios", "sortOrder": 2, "available": false, "demo": true },
+
+  { "id": "aromatica-hierbas", "name": "Aromática de hierbas", "description": "Hierbabuena, cidrón y limoncillo.", "priceCOP": 3500, "categoryId": "aromaticas", "sortOrder": 1, "demo": true },
+  { "id": "aromatica-frutas", "name": "Aromática de frutas", "description": "Frutas picadas en infusión caliente.", "priceCOP": 5000, "categoryId": "aromaticas", "sortOrder": 2, "featured": true, "demo": true },
+  { "id": "te-chai", "name": "Chai latte", "description": "Té especiado con leche espumada.", "priceCOP": 7500, "categoryId": "aromaticas", "sortOrder": 3, "demo": true },
+
+  { "id": "chocolate-queso", "name": "Chocolate con queso", "description": "Chocolate de mesa caliente con queso campesino.", "priceCOP": 6500, "categoryId": "otras-bebidas", "sortOrder": 1, "demo": true },
+  { "id": "agua-panela", "name": "Agua de panela", "description": "Caliente, con limón o con queso.", "priceCOP": 3500, "categoryId": "otras-bebidas", "sortOrder": 2, "demo": true },
+  { "id": "jugo-natural", "name": "Jugo natural", "description": "Lulo, mora o maracuyá.", "priceCOP": 0, "categoryId": "otras-bebidas", "sortOrder": 3, "demo": true,
+    "variants": [ { "name": "En agua", "priceCOP": 5500 }, { "name": "En leche", "priceCOP": 6500 } ] },
+
+  { "id": "torta-chocolate", "name": "Torta de chocolate", "description": "Húmeda, con cobertura de chocolate.", "priceCOP": 8000, "categoryId": "tortas-postres", "sortOrder": 1, "featured": true, "demo": true },
+  { "id": "torta-zanahoria", "name": "Torta de zanahoria", "description": "Con nueces y crema de queso.", "priceCOP": 8000, "categoryId": "tortas-postres", "sortOrder": 2, "allergens": ["nueces", "lácteos", "gluten"], "demo": true },
+  { "id": "cheesecake-mora", "name": "Cheesecake de mora", "description": "Base de galleta y salsa de mora.", "priceCOP": 10000, "categoryId": "tortas-postres", "sortOrder": 3, "demo": true },
+  { "id": "pandeyuca", "name": "Pandeyuca", "description": "Recién horneado.", "priceCOP": 2500, "categoryId": "tortas-postres", "sortOrder": 4, "demo": true },
+
+  { "id": "cafe-de-olla", "name": "Café de olla Cántaro", "description": "Café en olla de barro con canela, clavo y panela. Servido en taza de cerámica.", "priceCOP": 6000, "categoryId": "especiales", "sortOrder": 1, "featured": true, "demo": true }
+]

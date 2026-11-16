@@ -1,0 +1,8 @@
+[
+  { "id": "cafes-calientes", "name": "Cafés calientes", "description": "Café colombiano preparado al momento.", "icon": "coffee", "sortOrder": 1 },
+  { "id": "cafes-frios", "name": "Cafés fríos", "description": "Para las tardes de sol en el Valle.", "icon": "cup-soda", "sortOrder": 2 },
+  { "id": "aromaticas", "name": "Aromáticas e infusiones", "description": "Hierbas y frutas para el frío del Valle.", "icon": "leaf", "sortOrder": 3 },
+  { "id": "otras-bebidas", "name": "Otras bebidas", "description": "Chocolate, panela y jugos naturales.", "icon": "glass-water", "sortOrder": 4 },
+  { "id": "tortas-postres", "name": "Tortas y postres", "description": "Horneados para acompañar tu bebida.", "icon": "cake-slice", "sortOrder": 5 },
+  { "id": "especiales", "name": "Especiales de Cántaro", "description": "Recetas de la casa.", "icon": "sparkles", "sortOrder": 6 }
+]

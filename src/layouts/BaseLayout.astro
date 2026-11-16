@@ -1,0 +1,48 @@
+---
+import '@/styles/global.css';
+import SEO from '@/components/layout/SEO.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  /** Clases extra para <body>. */
+  bodyClass?: string;
+}
+
+const { bodyClass = '', ...seo } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es-CO">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#2f3e0f" />
+    <link rel="icon" href="/brand/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/brand/icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <SEO {...seo} />
+    <slot name="head" />
+  </head>
+  <body class={bodyClass}>
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:bg-olive-900 focus:px-4 focus:py-3 focus:text-cream-50"
+    >
+      Saltar al contenido
+    </a>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  /* Transiciones entre páginas nativas (sin JS); se desactivan con reduced-motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+      navigation: auto;
+    }
+  }
+</style>

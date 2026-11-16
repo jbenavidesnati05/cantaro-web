@@ -1,0 +1,23 @@
+---
+import { Image } from 'astro:assets';
+import logo from '@/assets/brand/logo-circular.png';
+
+interface Props {
+  /** Tamaño en px del lado del logo. */
+  size?: number;
+  class?: string;
+  loading?: 'eager' | 'lazy';
+}
+
+const { size = 56, class: className = '', loading = 'eager' } = Astro.props;
+---
+
+<Image
+  src={logo}
+  alt="Cántaro arte & diseño"
+  width={size}
+  height={size}
+  densities={[1, 2]}
+  loading={loading}
+  class:list={['rounded-full', className]}
+/>

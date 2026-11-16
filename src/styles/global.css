@@ -1,0 +1,73 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/fraunces/full.css';
+@import '@fontsource-variable/fraunces/full-italic.css';
+@import '@fontsource-variable/inter/index.css';
+
+/* ── Tokens de marca (paleta validada contra el logo oficial) ── */
+@theme {
+  --color-olive-900: #2f3e0f;
+  --color-olive-700: #4a5d1e;
+  --color-leaf-500: #6e9e2e; /* verde hoja del logo: solo acento/decorativo, no texto sobre crema */
+  --color-clay-500: #d2652a;
+  --color-clay-600: #b5521d; /* terracota con contraste AA para texto pequeño sobre crema */
+  --color-clay-300: #e9a27a;
+  --color-cream-50: #f8eedd;
+  --color-cream-100: #f1e2c8;
+  --color-bark-800: #5b3a21;
+  --color-bark-600: #7a5a40;
+  --color-paper: #fffdf8;
+  --color-stone-400: #9a8f84;
+
+  --font-display: 'Fraunces Variable', 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --text-hero: clamp(3.5rem, 2.2rem + 6.5vw, 7rem);
+  --text-display: clamp(2.25rem, 1.6rem + 3.2vw, 4rem);
+
+  --radius-blob: 2rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-cream-50 font-sans text-base text-bark-800 antialiased;
+  }
+  h1, h2, h3 {
+    @apply font-display text-bark-800;
+    font-variation-settings: 'SOFT' 50, 'WONK' 0;
+    text-wrap: balance;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-clay-500;
+  }
+  ::selection {
+    @apply bg-clay-300 text-bark-800;
+  }
+}
+
+/* Grano de papel sutil (SVG noise) */
+@utility grain {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
