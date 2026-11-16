@@ -1,0 +1,89 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import Icon from '@/components/brand/Icon.astro';
+import SocialIcon from '@/components/brand/SocialIcon.astro';
+import TodayHours from '@/components/layout/TodayHours.astro';
+import Visit from '@/components/home/Visit.astro';
+import { business } from '@/data/business';
+import { groupedHours } from '@/lib/schedule';
+import { waLink, formatPhone } from '@/lib/whatsapp';
+
+const wa = waLink('¡Hola, Cántaro!');
+const socials = (['instagram', 'facebook', 'tiktok'] as const)
+  .map((n) => ({ network: n, url: business.social[n], handle: '@cantaroarte' }))
+  .filter((s) => s.url !== null);
+const label = (n: string) => n[0]!.toUpperCase() + n.slice(1);
+const card = 'reveal flex flex-col rounded-[2rem] bg-paper p-7 shadow-[0_18px_40px_-30px_rgb(91_58_33/0.5)] ring-1 ring-bark-800/5';
+---
+
+<PageLayout
+  title="Contacto"
+  description={`Horarios, ubicación, WhatsApp y redes de ${business.shortName} en ${business.address.locality}, ${business.address.region}.`}
+>
+  <PageHero
+    eyebrow="Contacto"
+    title="Hablemos, o mejor, ven a vernos"
+    highlight="ven a vernos"
+    intro="Escríbenos para pedidos especiales, talleres privados o lo que necesites. Respondemos con gusto."
+  />
+
+  <div class="mx-auto grid max-w-6xl gap-4 px-4 py-16 sm:px-6 sm:py-24 md:grid-cols-2 lg:grid-cols-3">
+    {
+      wa && business.whatsapp && (
+        <a href={wa} target="_blank" rel="noopener" class:list={[card, 'group bg-olive-900! text-cream-50 transition hover:-translate-y-1']}>
+          <span class="grid size-12 place-items-center rounded-full bg-white/10 text-clay-300"><SocialIcon network="whatsapp" size={24} /></span>
+          <h2 class="mt-5 text-2xl text-cream-50">WhatsApp</h2>
+          <p class="mt-1 text-cream-100/80">La forma más rápida de hablar con nosotros.</p>
+          <p class="mt-auto pt-5 text-lg font-semibold">{formatPhone(business.whatsapp)}</p>
+        </a>
+      )
+    }
+    <a href={`mailto:${business.email}`} class:list={[card, 'transition hover:-translate-y-1']}>
+      <span class="grid size-12 place-items-center rounded-full bg-clay-500/12 text-clay-600"><Icon name="mail" size={24} /></span>
+      <h2 class="mt-5 text-2xl">Correo</h2>
+      <p class="mt-1 text-bark-600">Para propuestas, alianzas y pedidos grandes.</p>
+      <p class="mt-auto pt-5 text-lg font-semibold break-all text-clay-600">{business.email}</p>
+    </a>
+    <div class={card}>
+      <span class="grid size-12 place-items-center rounded-full bg-clay-500/12 text-clay-600"><Icon name="clock" size={24} /></span>
+      <h2 class="mt-5 text-2xl">Horario</h2>
+      <TodayHours class="mt-1" showWeek={false} />
+      {
+        business.hours && (
+          <ul class="mt-4 space-y-1 text-[0.95rem] text-bark-600">
+            {groupedHours(business.hours).map((g) => (
+              <li>
+                <span class="font-medium text-bark-800">{g.days}:</span> {g.hours}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    <div class:list={[card, 'md:col-span-2 lg:col-span-3']}>
+      <h2 class="text-2xl">Síguenos</h2>
+      <p class="mt-1 text-bark-600">Novedades, talleres y lo que sale del horno, primero en redes.</p>
+      <ul class="mt-5 flex flex-wrap gap-3">
+        {
+          socials.map((s) => (
+            <li>
+              <a
+                href={s.url!}
+                target="_blank"
+                rel="noopener"
+                class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-cream-100 px-5 font-semibold transition hover:bg-clay-500 hover:text-cream-50"
+              >
+                <SocialIcon network={s.network} />
+                {label(s.network)} <span class="font-normal opacity-70">{s.handle}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <Visit />
+</PageLayout>

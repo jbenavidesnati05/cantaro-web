@@ -1,0 +1,137 @@
+---
+import Logo from '@/components/brand/Logo.astro';
+import Icon from '@/components/brand/Icon.astro';
+import { NAV_LINKS } from '@/data/nav';
+
+const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => !href.includes('#') && href === path;
+---
+
+<header class="fixed inset-x-0 top-0 z-40 px-3 pt-3 sm:px-5 sm:pt-4" data-site-header>
+  <div
+    class="mx-auto flex max-w-6xl items-center gap-3 rounded-full border border-white/60 bg-paper/70 py-2 pr-2 pl-2 shadow-[0_8px_30px_-12px_rgb(91_58_33/0.25)] backdrop-blur-xl transition-all duration-300 in-data-[scrolled]:bg-paper/90 in-data-[scrolled]:py-1.5 sm:pl-3"
+  >
+    <a href="/" class="flex min-h-11 shrink-0 items-center gap-2.5 rounded-full pr-2" aria-label="Cántaro, ir al inicio">
+      <Logo size={44} class="transition-all duration-300 in-data-[scrolled]:size-10" />
+      <span class="hidden leading-none sm:block">
+        <span class="block font-display text-xl font-semibold">Cántaro</span>
+        <span class="block text-[0.65rem] tracking-[0.2em] text-bark-600 uppercase">arte &amp; diseño</span>
+      </span>
+    </a>
+
+    <nav aria-label="Principal" class="ml-auto hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {
+          NAV_LINKS.map((l) => (
+            <li>
+              <a
+                href={l.href}
+                aria-current={isCurrent(l.href) ? 'page' : undefined}
+                class="inline-flex min-h-11 items-center rounded-full px-4 font-medium text-bark-800 transition-colors hover:bg-cream-100 aria-[current=page]:bg-cream-100 aria-[current=page]:text-clay-600"
+              >
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a
+      href="/menu"
+      class="ml-auto inline-flex min-h-11 items-center gap-2 rounded-full bg-olive-900 px-5 font-semibold text-cream-50 transition hover:bg-olive-700 lg:ml-2"
+    >
+      Ver la carta
+    </a>
+
+    <button
+      type="button"
+      popovertarget="mobile-nav"
+      class="grid size-11 shrink-0 place-items-center rounded-full text-bark-800 hover:bg-cream-100 lg:hidden"
+      aria-label="Abrir menú"
+    >
+      <Icon name="menu" size={24} />
+    </button>
+  </div>
+
+  <div
+    id="mobile-nav"
+    popover
+    class="m-0 h-dvh max-h-none w-full max-w-none bg-olive-900 p-0 text-cream-50 lg:hidden"
+  >
+    <div class="mx-auto flex h-full max-w-lg flex-col px-6 pt-5 pb-10">
+      <div class="flex items-center justify-between">
+        <span class="font-display text-2xl text-cream-50">Cántaro</span>
+        <button
+          type="button"
+          popovertarget="mobile-nav"
+          popovertargetaction="hide"
+          class="grid size-11 place-items-center rounded-full hover:bg-white/10"
+          aria-label="Cerrar menú"
+        >
+          <Icon name="x" size={26} />
+        </button>
+      </div>
+      <nav aria-label="Principal (móvil)" class="mt-10">
+        <ul class="space-y-1">
+          <li>
+            <a href="/" class="mobile-link">Inicio</a>
+          </li>
+          {
+            NAV_LINKS.map((l) => (
+              <li>
+                <a href={l.href} class="mobile-link" aria-current={isCurrent(l.href) ? 'page' : undefined}>
+                  {l.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <p class="mt-auto font-display text-xl text-cream-100/80 italic">Un espacio de café y creación</p>
+    </div>
+  </div>
+</header>
+
+<style>
+  .mobile-link {
+    display: flex;
+    min-height: 3.25rem;
+    align-items: center;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--color-cream-50);
+  }
+  .mobile-link[aria-current='page'] {
+    color: var(--color-clay-300);
+  }
+  #mobile-nav {
+    opacity: 0;
+    transform: translateY(-12px);
+    transition:
+      opacity 0.25s,
+      transform 0.25s,
+      display 0.25s allow-discrete,
+      overlay 0.25s allow-discrete;
+  }
+  #mobile-nav:popover-open {
+    opacity: 1;
+    transform: none;
+  }
+  @starting-style {
+    #mobile-nav:popover-open {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  const onScroll = () => header?.toggleAttribute('data-scrolled', scrollY > 24);
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  // Cerrar el menú móvil al navegar a un ancla de la misma página.
+  const pop = document.getElementById('mobile-nav');
+  pop?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => pop.hidePopover()));
+</script>

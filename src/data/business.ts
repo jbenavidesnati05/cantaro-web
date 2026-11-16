@@ -8,16 +8,6 @@ export type DayKey = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
 /** Horas en formato 24 h "HH:MM". `null` = cerrado ese día. */
 export type DayHours = { open: string; close: string } | null;
 
-export interface Workshop {
-  title: string;
-  description: string;
-  /** Fecha ISO "YYYY-MM-DD". */
-  date: string;
-  time: string | null;
-  priceCOP: number | null;
-  spots: number | null;
-}
-
 export interface Business {
   name: string;
   shortName: string;
@@ -41,7 +31,6 @@ export interface Business {
     instagram: string | null;
     tiktok: string | null;
   };
-  nextWorkshop: Workshop | null;
   timezone: string;
 }
 
@@ -77,15 +66,6 @@ export const business: Business = {
     facebook: 'https://facebook.com/cantaroarte',
     instagram: 'https://instagram.com/cantaroarte',
     tiktok: null, // pendiente de crear
-  },
-  // SUPUESTO — taller de ejemplo
-  nextWorkshop: {
-    title: 'Taller de velas aromáticas',
-    description: 'Aprende a hacer tu propia vela de soya con esencias naturales. Incluye materiales y una bebida caliente.',
-    date: '2026-12-12',
-    time: '15:00',
-    priceCOP: 45000,
-    spots: 10,
   },
   timezone: 'America/Bogota',
 };

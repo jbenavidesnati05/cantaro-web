@@ -1,0 +1,49 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  /** Palabra del título que va en itálica terracota con subrayado a mano. */
+  highlight?: string;
+  intro?: string;
+  align?: 'left' | 'center';
+  tone?: 'light' | 'dark';
+  id?: string;
+}
+const { eyebrow, title, highlight, intro, align = 'left', tone = 'light', id } = Astro.props;
+const parts = highlight && title.includes(highlight) ? title.split(highlight) : [title];
+---
+
+<div class:list={['reveal max-w-2xl', align === 'center' && 'mx-auto text-center']}>
+  {
+    eyebrow && (
+      <p
+        class:list={[
+          'mb-3 text-sm font-semibold tracking-[0.18em] uppercase',
+          tone === 'dark' ? 'text-clay-300' : 'text-clay-600',
+        ]}
+      >
+        {eyebrow}
+      </p>
+    )
+  }
+  <h2 id={id} class:list={['text-display leading-[1.05] font-medium', tone === 'dark' && 'text-cream-50']}>
+    {parts[0]}
+    {
+      parts.length > 1 && (
+        <>
+          <em class:list={['brush-underline font-normal', tone === 'dark' ? 'text-clay-300' : 'text-clay-600']}>
+            {highlight}
+          </em>
+          {parts[1]}
+        </>
+      )
+    }
+  </h2>
+  {
+    intro && (
+      <p class:list={['mt-4 text-lg leading-relaxed', tone === 'dark' ? 'text-cream-100/85' : 'text-bark-600']}>
+        {intro}
+      </p>
+    )
+  }
+</div>

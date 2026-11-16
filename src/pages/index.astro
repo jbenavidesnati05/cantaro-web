@@ -1,25 +1,66 @@
 ---
-// Portada provisional (Fase 1). La landing completa se construye en la Fase 3.
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import Logo from '@/components/brand/Logo.astro';
+import PageLayout from '@/layouts/PageLayout.astro';
+import Hero from '@/components/home/Hero.astro';
+import Marquee from '@/components/home/Marquee.astro';
+import PillarsBento from '@/components/home/PillarsBento.astro';
+import FeaturedMenu from '@/components/home/FeaturedMenu.astro';
+import Story from '@/components/home/Story.astro';
+import CraftsPreview from '@/components/home/CraftsPreview.astro';
+import WorkshopsSection from '@/components/home/WorkshopsSection.astro';
+import Faq from '@/components/home/Faq.astro';
+import Visit from '@/components/home/Visit.astro';
 import { business } from '@/data/business';
-import { getMenu, showDemo } from '@/lib/menu';
+import { getUpcomingWorkshops } from '@/lib/catalog';
+import { DAY_ORDER } from '@/lib/schedule';
 
-const menu = await getMenu();
-const count = menu.reduce((n, s) => n + s.products.length, 0);
+const workshops = await getUpcomingWorkshops();
+
+// JSON-LD CafeOrCoffeeShop (se omiten los campos null).
+const schemaDays: Record<string, string> = {
+  mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday',
+};
+const hours = business.hours;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CafeOrCoffeeShop',
+  name: business.name,
+  description: business.description,
+  url: business.url,
+  email: business.email,
+  image: new URL('/brand/og.jpg', business.url).href,
+  logo: new URL('/brand/icon-512.png', business.url).href,
+  hasMenu: new URL('/menu', business.url).href,
+  servesCuisine: ['Café', 'Postres'],
+  ...(business.whatsapp && { telephone: `+${business.whatsapp}` }),
+  address: {
+    '@type': 'PostalAddress',
+    ...(business.address.street && { streetAddress: business.address.street }),
+    addressLocality: business.address.locality,
+    addressRegion: business.address.region,
+    addressCountry: business.address.country,
+  },
+  ...(business.geo && { geo: { '@type': 'GeoCoordinates', latitude: business.geo.lat, longitude: business.geo.lng } }),
+  ...(hours && {
+    openingHoursSpecification: DAY_ORDER.filter((d) => hours[d]).map((d) => ({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: schemaDays[d],
+      opens: hours[d]!.open,
+      closes: hours[d]!.close,
+    })),
+  }),
+  sameAs: Object.values(business.social).filter(Boolean),
+};
 ---
 
-<BaseLayout>
-  <main id="contenido" class="grain grid min-h-dvh place-items-center bg-cream-50 px-4 py-16 text-center">
-    <div class="max-w-xl">
-      <Logo size={160} class="mx-auto shadow-lg" />
-      <h1 class="mt-8 text-display leading-tight">
-        Un espacio de <em class="text-clay-600">café</em> y creación
-      </h1>
-      <p class="mt-4 text-lg text-bark-600">{business.address.locality}, {business.address.region}</p>
-      <p class="mt-8 text-sm text-bark-600">
-        Base del proyecto lista · {menu.length} categorías · {count} productos {showDemo && '(demo)'}
-      </p>
-    </div>
-  </main>
-</BaseLayout>
+<PageLayout>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <Hero nextWorkshop={workshops[0]} />
+  <Marquee />
+  <PillarsBento />
+  <FeaturedMenu />
+  <Story />
+  <CraftsPreview />
+  <WorkshopsSection workshops={workshops} />
+  <Faq />
+  <Visit />
+</PageLayout>

@@ -41,4 +41,38 @@ const products = defineCollection({
     }),
 });
 
-export const collections = { categories, products };
+const artesanias = defineCollection({
+  loader: file('src/content/artesanias/products.json'),
+  schema: z.object({
+    id: z.string().regex(/^[a-z0-9-]+$/, 'id en kebab-case'),
+    name: z.string().min(1),
+    description: z.string().optional(),
+    category: z.enum(['velas', 'esencias', 'textiles', 'ceramica', 'artesanias']),
+    /** null = "Pregunta el precio" (piezas únicas o por encargo). */
+    priceCOP: z.number().int().positive().nullable(),
+    image: z.string().nullable().optional(),
+    available: z.boolean().default(true),
+    featured: z.boolean().default(false),
+    sortOrder: z.number().int(),
+    demo: z.boolean().default(false),
+  }),
+});
+
+const talleres = defineCollection({
+  loader: file('src/content/talleres/workshops.json'),
+  schema: z.object({
+    id: z.string().regex(/^[a-z0-9-]+$/, 'id en kebab-case'),
+    title: z.string().min(1),
+    description: z.string(),
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'fecha YYYY-MM-DD'),
+    time: z.string().regex(/^\d{2}:\d{2}$/, 'hora HH:MM').nullable(),
+    durationMin: z.number().int().positive().nullable(),
+    priceCOP: z.number().int().positive().nullable(),
+    spots: z.number().int().positive().nullable(),
+    includes: z.array(z.string()).default([]),
+    level: z.string().optional(),
+    demo: z.boolean().default(false),
+  }),
+});
+
+export const collections = { categories, products, artesanias, talleres };

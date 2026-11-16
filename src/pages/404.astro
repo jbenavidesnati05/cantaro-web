@@ -1,0 +1,26 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Vasija from '@/components/brand/Vasija.astro';
+import Icon from '@/components/brand/Icon.astro';
+---
+
+<PageLayout title="Página no encontrada" noindex>
+  <section class="mesh-warm grain grid min-h-[80dvh] place-items-center px-4 pt-32 pb-20 text-center">
+    <div class="max-w-xl">
+      <Vasija class="mx-auto w-48 -rotate-12" steam={false} />
+      <p class="mt-6 text-sm font-semibold tracking-[0.18em] text-clay-600 uppercase">Error 404</p>
+      <h1 class="mt-3 text-display leading-tight font-medium">
+        Este cántaro <em class="font-normal text-clay-600">está vacío</em>
+      </h1>
+      <p class="mt-4 text-lg text-bark-600">La página que buscas no existe o cambió de lugar. Pero la carta sí está aquí.</p>
+      <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+        <a href="/menu" class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-olive-900 px-6 font-semibold text-cream-50 transition hover:bg-olive-700">
+          Ver la carta <Icon name="arrow-right" size={18} />
+        </a>
+        <a href="/" class="inline-flex min-h-12 items-center justify-center rounded-full px-6 font-semibold ring-1 ring-bark-800/20 transition hover:bg-paper">
+          Ir al inicio
+        </a>
+      </div>
+    </div>
+  </section>
+</PageLayout>

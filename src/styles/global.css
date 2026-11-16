@@ -64,6 +64,78 @@
   }
 }
 
+/* Fondo "mesh gradient" cálido */
+@utility mesh-warm {
+  background-color: var(--color-cream-50);
+  background-image:
+    radial-gradient(60% 50% at 85% 10%, rgb(233 162 122 / 0.45), transparent 70%),
+    radial-gradient(50% 45% at 10% 90%, rgb(241 226 200 / 0.9), transparent 70%),
+    radial-gradient(40% 40% at 60% 70%, rgb(110 158 46 / 0.12), transparent 70%),
+    radial-gradient(70% 60% at 20% 0%, rgb(255 253 248 / 0.9), transparent 70%);
+}
+
+/* Formas orgánicas de barro */
+@utility blob {
+  border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+  animation: blob-morph 14s ease-in-out infinite alternate;
+}
+@keyframes blob-morph {
+  0% { border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%; transform: rotate(0deg) scale(1); }
+  50% { border-radius: 58% 42% 38% 62% / 55% 38% 62% 45%; transform: rotate(6deg) scale(1.03); }
+  100% { border-radius: 36% 64% 52% 48% / 46% 60% 40% 54%; transform: rotate(-4deg) scale(0.98); }
+}
+
+/* Vapor de la vasija */
+@keyframes steam {
+  0% { stroke-dashoffset: 120; opacity: 0; }
+  30% { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Marquee infinito */
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* Aparición al hacer scroll: CSS scroll-driven donde exista; fallback con IntersectionObserver (BaseLayout). */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 28%;
+    }
+  }
+  @supports not (animation-timeline: view()) {
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Subrayado "pintado a mano" */
+@utility brush-underline {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M2 9c30-5 60-7 98-6s70 4 98 1' fill='none' stroke='%23D2652A' stroke-width='4' stroke-linecap='round' opacity='.75'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0.32em;
+  padding-bottom: 0.08em;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

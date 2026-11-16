@@ -1,0 +1,20 @@
+[
+  { "id": "vela-lavanda", "name": "Vela de soya con lavanda", "description": "Vela en frasco de vidrio, aroma suave para descansar.", "category": "velas", "priceCOP": 28000, "featured": true, "sortOrder": 1, "demo": true },
+  { "id": "vela-cafe-canela", "name": "Vela café y canela", "description": "El olor de la cocina en una tarde fría del Valle.", "category": "velas", "priceCOP": 30000, "sortOrder": 2, "demo": true },
+  { "id": "vela-tallada", "name": "Vela tallada decorativa", "description": "Pieza única, ideal para regalar.", "category": "velas", "priceCOP": null, "sortOrder": 3, "demo": true },
+
+  { "id": "esencia-eucalipto", "name": "Esencia de eucalipto", "description": "Para difusor o lámpara de aromas. 10 ml.", "category": "esencias", "priceCOP": 15000, "sortOrder": 1, "demo": true },
+  { "id": "esencia-naranja", "name": "Esencia de naranja y clavo", "description": "Cálida y especiada. 10 ml.", "category": "esencias", "priceCOP": 15000, "sortOrder": 2, "demo": true },
+  { "id": "lampara-aromas", "name": "Lámpara de aromas en cerámica", "description": "Calado con hojas, para vela de té.", "category": "esencias", "priceCOP": 45000, "featured": true, "sortOrder": 3, "demo": true },
+
+  { "id": "camino-mesa", "name": "Camino de mesa tejido", "description": "Tejido a mano con flecos, tonos crudos.", "category": "textiles", "priceCOP": 65000, "featured": true, "sortOrder": 1, "demo": true },
+  { "id": "individuales", "name": "Juego de individuales", "description": "Cuatro individuales de algodón con bordado de hojas.", "category": "textiles", "priceCOP": 58000, "sortOrder": 2, "demo": true },
+  { "id": "macrame", "name": "Colgante de macramé", "description": "Para pared o materas. Varios tamaños.", "category": "textiles", "priceCOP": null, "sortOrder": 3, "demo": true },
+
+  { "id": "taza-hojas", "name": "Taza pintada a mano", "description": "Cerámica esmaltada con motivo de hojas.", "category": "ceramica", "priceCOP": 32000, "featured": true, "sortOrder": 1, "demo": true },
+  { "id": "matera-ceramica", "name": "Matera de cerámica", "description": "Con plato, para plantas pequeñas.", "category": "ceramica", "priceCOP": 38000, "sortOrder": 2, "demo": true },
+  { "id": "figura-cantaro", "name": "Mini cántaro decorativo", "description": "Pequeña vasija de barro pintada.", "category": "ceramica", "priceCOP": 25000, "sortOrder": 3, "demo": true },
+
+  { "id": "libreta-artesanal", "name": "Libreta artesanal", "description": "Tapa ilustrada a mano y hojas recicladas.", "category": "artesanias", "priceCOP": 22000, "sortOrder": 1, "demo": true },
+  { "id": "kit-regalo", "name": "Kit de regalo Cántaro", "description": "Vela, esencia y taza en caja kraft. Armamos el tuyo.", "category": "artesanias", "priceCOP": null, "featured": true, "sortOrder": 2, "demo": true }
+]

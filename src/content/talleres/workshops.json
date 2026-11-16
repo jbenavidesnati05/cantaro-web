@@ -1,0 +1,41 @@
+[
+  {
+    "id": "velas-aromaticas-dic-2026",
+    "title": "Taller de velas aromáticas",
+    "description": "Aprende a hacer tu propia vela de soya con esencias naturales: mezcla, aroma, mecha y decoración. Te llevas tu vela a casa.",
+    "date": "2026-12-12",
+    "time": "15:00",
+    "durationMin": 150,
+    "priceCOP": 45000,
+    "spots": 10,
+    "includes": ["Todos los materiales", "Una bebida caliente", "Tu vela para llevar"],
+    "level": "Sin experiencia",
+    "demo": true
+  },
+  {
+    "id": "ceramica-pintada-ene-2027",
+    "title": "Pinta tu taza de cerámica",
+    "description": "Elige una taza en blanco y píntala a mano con motivos de hojas, flores o lo que quieras. Nosotros la horneamos.",
+    "date": "2027-01-16",
+    "time": "15:00",
+    "durationMin": 120,
+    "priceCOP": 40000,
+    "spots": 8,
+    "includes": ["Taza y pinturas", "Horneado", "Un postre de la casa"],
+    "level": "Sin experiencia",
+    "demo": true
+  },
+  {
+    "id": "macrame-feb-2027",
+    "title": "Macramé para principiantes",
+    "description": "Nudos básicos para crear un colgante de pared. Una tarde tranquila para tejer y conversar.",
+    "date": "2027-02-13",
+    "time": "15:00",
+    "durationMin": 180,
+    "priceCOP": 50000,
+    "spots": 10,
+    "includes": ["Cuerda de algodón y aro", "Una bebida", "Guía impresa"],
+    "level": "Sin experiencia",
+    "demo": true
+  }
+]

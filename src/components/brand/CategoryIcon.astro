@@ -1,29 +1,13 @@
 ---
-// Íconos de categoría (lucide, trazo 1.5). Para agregar uno: importarlo y sumarlo al mapa.
-import Coffee from '@lucide/astro/icons/coffee';
-import CupSoda from '@lucide/astro/icons/cup-soda';
-import Leaf from '@lucide/astro/icons/leaf';
-import GlassWater from '@lucide/astro/icons/glass-water';
-import CakeSlice from '@lucide/astro/icons/cake-slice';
-import Sparkles from '@lucide/astro/icons/sparkles';
-
-const icons = {
-  coffee: Coffee,
-  'cup-soda': CupSoda,
-  leaf: Leaf,
-  'glass-water': GlassWater,
-  'cake-slice': CakeSlice,
-  sparkles: Sparkles,
-};
+// Ícono de categoría del menú (alias de Icon, con café como respaldo).
+import Icon from './Icon.astro';
 
 interface Props {
   name?: string | undefined;
   size?: number;
   class?: string;
 }
-
 const { name, size = 20, class: className = '' } = Astro.props;
-const Icon = name && name in icons ? icons[name as keyof typeof icons] : Coffee;
 ---
 
-<Icon size={size} stroke-width={1.5} aria-hidden="true" class={className} />
+<Icon name={name ?? 'coffee'} size={size} class={className} />

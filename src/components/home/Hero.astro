@@ -1,0 +1,112 @@
+---
+import Vasija from '@/components/brand/Vasija.astro';
+import Icon from '@/components/brand/Icon.astro';
+import { business } from '@/data/business';
+import { formatDateParts } from '@/lib/format';
+import type { Workshop } from '@/lib/catalog';
+
+interface Props {
+  nextWorkshop: Workshop | undefined;
+}
+const { nextWorkshop } = Astro.props;
+const wsDate = nextWorkshop ? formatDateParts(nextWorkshop.date) : null;
+---
+
+<section class="mesh-warm grain relative overflow-hidden pt-28 pb-16 sm:pt-36 lg:pb-28" aria-labelledby="hero-title">
+  <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[1.15fr_0.85fr]">
+    <div>
+      <p class="hero-in inline-flex items-center gap-2 rounded-full bg-paper/70 px-3.5 py-1.5 text-sm font-medium text-olive-900 ring-1 ring-olive-900/10 backdrop-blur">
+        <Icon name="map-pin" size={16} class="text-clay-600" />
+        {business.address.locality}, {business.address.region}
+      </p>
+
+      <h1 id="hero-title" class="hero-in mt-6 text-hero leading-[0.92] font-medium tracking-tight [--d:80ms]">
+        Un espacio de café y <em class="brush-underline font-normal text-clay-600">creación</em>
+      </h1>
+
+      <p class="hero-in mt-6 max-w-xl text-lg leading-relaxed text-bark-600 sm:text-xl [--d:160ms]">
+        Café colombiano, objetos hechos a mano y talleres para aprender con las manos, en el corazón del Valle de
+        Sibundoy. Llega, pide algo rico y quédate un rato.
+      </p>
+
+      <div class="hero-in mt-8 flex flex-col gap-3 sm:flex-row [--d:240ms]">
+        <a
+          href="/menu"
+          class="group inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-olive-900 px-7 text-lg font-semibold text-cream-50 shadow-[0_12px_30px_-12px_rgb(47_62_15/0.7)] transition hover:bg-olive-700"
+        >
+          Ver la carta
+          <Icon name="arrow-right" size={20} class="transition-transform group-hover:translate-x-1" />
+        </a>
+        <a
+          href="/talleres"
+          class="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-paper/80 px-7 text-lg font-semibold text-bark-800 ring-1 ring-bark-800/15 backdrop-blur transition hover:bg-paper"
+        >
+          <Icon name="palette" size={20} class="text-clay-600" />
+          Próximos talleres
+        </a>
+      </div>
+
+      <ul class="hero-in mt-10 flex flex-wrap gap-x-6 gap-y-3 text-bark-600 [--d:320ms]">
+        <li class="flex items-center gap-2"><Icon name="coffee" class="text-clay-600" /> Café y postres</li>
+        <li class="flex items-center gap-2"><Icon name="amphora" class="text-clay-600" /> Artesanías</li>
+        <li class="flex items-center gap-2"><Icon name="palette" class="text-clay-600" /> Talleres</li>
+      </ul>
+    </div>
+
+    <!-- Collage orgánico (se reemplazará por fotos reales del local) -->
+    <div class="relative mx-auto aspect-square w-full max-w-[30rem]" aria-hidden="false">
+      <div class="blob absolute inset-[6%] bg-clay-300/70"></div>
+      <div class="blob absolute top-[2%] right-[4%] size-[34%] bg-olive-900 [animation-delay:-5s]"></div>
+      <div class="blob absolute bottom-[4%] left-[2%] size-[26%] bg-leaf-500/50 [animation-delay:-9s]"></div>
+      <div class="absolute inset-[18%] rounded-full bg-paper/60 blur-2xl"></div>
+      <Vasija class="float absolute inset-[10%] drop-shadow-[0_30px_30px_rgb(91_58_33/0.25)]" />
+
+      <div
+        class="float absolute top-[14%] -left-1 flex items-center gap-2 rounded-2xl bg-paper/90 px-3.5 py-2.5 text-sm font-semibold shadow-lg ring-1 ring-bark-800/5 backdrop-blur [animation-delay:-2s] sm:-left-6"
+      >
+        <span class="grid size-8 place-items-center rounded-full bg-clay-500/15 text-clay-600"><Icon name="hand-heart" size={18} /></span>
+        Hecho a mano
+      </div>
+
+      {
+        wsDate && nextWorkshop && (
+          <a
+            href="/talleres"
+            class="float absolute right-0 bottom-[10%] flex items-center gap-3 rounded-2xl bg-olive-900 px-4 py-3 text-cream-50 shadow-xl transition hover:bg-olive-700 [animation-delay:-4s] sm:-right-4"
+          >
+            <span class="text-center leading-none">
+              <span class="block font-display text-3xl">{wsDate.day}</span>
+              <span class="block text-xs tracking-widest text-clay-300 uppercase">{wsDate.month}</span>
+            </span>
+            <span class="max-w-[10rem] text-sm leading-snug">
+              <span class="block text-xs text-cream-100/70">Próximo taller</span>
+              {nextWorkshop.title}
+            </span>
+          </a>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-in {
+      animation: hero-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: var(--d, 0ms);
+    }
+    .float {
+      animation: float 6s ease-in-out infinite;
+    }
+  }
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

@@ -1,0 +1,62 @@
+---
+import Icon from '@/components/brand/Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import WorkshopTicket from '@/components/talleres/WorkshopTicket.astro';
+import { formatDateParts } from '@/lib/format';
+import type { Workshop } from '@/lib/catalog';
+
+interface Props {
+  workshops: Workshop[];
+}
+const { workshops } = Astro.props;
+const [next, ...rest] = workshops;
+---
+
+<section class="mesh-warm py-20 sm:py-28" aria-labelledby="talleres-title">
+  <div class="mx-auto grid max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+    <div>
+      <SectionHeading
+        id="talleres-title"
+        eyebrow="Talleres creativos"
+        title="Aprende algo nuevo con las manos"
+        highlight="las manos"
+        intro="Una vez al mes nos sentamos a crear: velas, cerámica, tejidos y más. No necesitas experiencia, solo ganas."
+      />
+      {
+        rest.length > 0 && (
+          <ul class="reveal mt-8 space-y-2">
+            {rest.slice(0, 2).map((w) => {
+              const d = formatDateParts(w.date);
+              return (
+                <li class="flex items-center gap-4 rounded-2xl bg-paper/70 p-3 pr-5 ring-1 ring-bark-800/5">
+                  <span class="grid size-14 shrink-0 place-items-center rounded-xl bg-olive-900 text-center leading-none text-cream-50">
+                    <span>
+                      <span class="block font-display text-2xl">{d.day}</span>
+                      <span class="block text-[0.65rem] tracking-widest text-clay-300 uppercase">{d.month}</span>
+                    </span>
+                  </span>
+                  <span class="font-medium">{w.title}</span>
+                </li>
+              );
+            })}
+          </ul>
+        )
+      }
+      <a href="/talleres" class="reveal group mt-8 inline-flex min-h-11 items-center gap-2 font-semibold text-clay-600">
+        Ver todos los talleres
+        <Icon name="arrow-right" size={18} class="transition-transform group-hover:translate-x-1" />
+      </a>
+    </div>
+
+    {
+      next ? (
+        <WorkshopTicket workshop={next} />
+      ) : (
+        <div class="reveal rounded-[2rem] border-2 border-dashed border-clay-500/40 bg-paper/60 p-10 text-center">
+          <p class="font-display text-4xl">Muy pronto</p>
+          <p class="mt-3 text-bark-600">Estamos preparando el próximo taller. Síguenos en redes para enterarte primero.</p>
+        </div>
+      )
+    }
+  </div>
+</section>

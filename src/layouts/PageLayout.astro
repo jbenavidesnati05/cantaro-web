@@ -1,0 +1,24 @@
+---
+// Layout de las páginas del sitio (todo menos /menu): cabecera, pie y WhatsApp.
+import BaseLayout from './BaseLayout.astro';
+import SiteHeader from '@/components/layout/SiteHeader.astro';
+import SiteFooter from '@/components/layout/SiteFooter.astro';
+import WhatsAppFab from '@/components/layout/WhatsAppFab.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+---
+
+<BaseLayout {...Astro.props}>
+  <slot name="head" slot="head" />
+  <SiteHeader />
+  <main id="contenido">
+    <slot />
+  </main>
+  <SiteFooter />
+  <WhatsAppFab />
+</BaseLayout>

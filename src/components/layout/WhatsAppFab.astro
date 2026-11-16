@@ -1,0 +1,21 @@
+---
+// Botón flotante de WhatsApp. Solo se muestra si hay número. NO usar en /menu.
+import SocialIcon from '@/components/brand/SocialIcon.astro';
+import { waLink } from '@/lib/whatsapp';
+
+const href = waLink('¡Hola, Cántaro! Quiero hacer una consulta.');
+---
+
+{
+  href && (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener"
+      class="fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-30 grid size-14 place-items-center rounded-full bg-olive-900 text-cream-50 shadow-[0_10px_30px_-8px_rgb(47_62_15/0.6)] ring-4 ring-cream-50/60 transition hover:scale-105 hover:bg-olive-700"
+      aria-label="Escríbenos por WhatsApp"
+    >
+      <SocialIcon network="whatsapp" size={26} />
+    </a>
+  )
+}

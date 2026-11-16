@@ -1,0 +1,55 @@
+---
+import Icon from '@/components/brand/Icon.astro';
+import LeafDivider from '@/components/brand/LeafDivider.astro';
+
+const values = [
+  { icon: 'hand-heart', title: 'Hecho a mano', text: 'Cada pieza y cada taza pasan por manos que cuidan el detalle.' },
+  { icon: 'users', title: 'Para compartir', text: 'Una mesa larga, una conversación, algo rico en el centro.' },
+  { icon: 'sprout', title: 'Quédate un rato', text: 'Aquí nadie te apura. El tiempo también se disfruta.' },
+];
+---
+
+<section id="nosotros" class="grain relative scroll-mt-24 overflow-hidden bg-olive-900 py-20 text-cream-100 sm:py-28" aria-labelledby="historia-title">
+  <div class="blob pointer-events-none absolute -top-24 -right-24 size-80 bg-olive-700/60" aria-hidden="true"></div>
+  <div class="blob pointer-events-none absolute -bottom-32 -left-20 size-72 bg-clay-500/15 [animation-delay:-6s]" aria-hidden="true"></div>
+
+  <div class="relative mx-auto grid max-w-6xl gap-14 px-4 sm:px-6 lg:grid-cols-2 lg:gap-20">
+    <div class="reveal">
+      <p class="text-sm font-semibold tracking-[0.18em] text-clay-300 uppercase">Nuestra historia</p>
+      <h2 id="historia-title" class="sr-only">Por qué nos llamamos Cántaro</h2>
+      <blockquote class="mt-6">
+        <p class="font-display text-[clamp(2rem,1.4rem+3vw,3.5rem)] leading-[1.08] text-cream-50 italic">
+          “Un cántaro guarda lo que importa y lo comparte con quien llega.”
+        </p>
+      </blockquote>
+      <LeafDivider class="mt-10 justify-start text-clay-300" />
+    </div>
+
+    <div class="reveal space-y-5 text-lg leading-relaxed">
+      <p>
+        El cántaro es la vasija de barro de toda la vida: se hace a mano, guarda el agua, el café o la chicha, y se pone
+        en el centro de la mesa para que todos se sirvan. Por eso nos llamamos así.
+      </p>
+      <p>
+        Cántaro nació como un proyecto de manualidades y capacitación. Hoy crecimos a un espacio en Sibundoy donde se
+        juntan tres cosas que nos encantan: <strong class="font-semibold text-cream-50">un buen café, los objetos hechos
+        a mano y aprender creando</strong>.
+      </p>
+      <p>Te esperamos para que lo conozcas, con calma y sin afán.</p>
+    </div>
+  </div>
+
+  <ul class="relative mx-auto mt-16 grid max-w-6xl gap-4 px-4 sm:px-6 md:grid-cols-3">
+    {
+      values.map((v) => (
+        <li class="reveal rounded-[2rem] bg-white/[0.06] p-7 ring-1 ring-white/10 backdrop-blur-sm">
+          <span class="grid size-12 place-items-center rounded-full bg-clay-500/20 text-clay-300">
+            <Icon name={v.icon} size={24} />
+          </span>
+          <h3 class="mt-5 text-2xl text-cream-50">{v.title}</h3>
+          <p class="mt-2 text-cream-100/80">{v.text}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

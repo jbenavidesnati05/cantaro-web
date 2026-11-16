@@ -1,0 +1,16 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<div class:list={['flex items-center justify-center gap-3', className]} aria-hidden="true">
+  <span class="h-px w-16 bg-current opacity-30"></span>
+  <svg width="36" height="18" viewBox="0 0 36 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+    <path d="M2 9h32" opacity=".5" />
+    <path d="M18 9c-4-6-10-7-13-6 1 4 6 8 13 6z" fill="currentColor" fill-opacity=".15" />
+    <path d="M18 9c4-6 10-7 13-6-1 4-6 8-13 6z" fill="currentColor" fill-opacity=".15" />
+  </svg>
+  <span class="h-px w-16 bg-current opacity-30"></span>
+</div>

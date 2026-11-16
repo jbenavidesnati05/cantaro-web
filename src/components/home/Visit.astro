@@ -1,0 +1,100 @@
+---
+import Icon from '@/components/brand/Icon.astro';
+import SocialIcon from '@/components/brand/SocialIcon.astro';
+import TodayHours from '@/components/layout/TodayHours.astro';
+import SectionHeading from './SectionHeading.astro';
+import { business } from '@/data/business';
+import { waLink } from '@/lib/whatsapp';
+
+const wa = waLink('¡Hola, Cántaro! Quiero saber cómo llegar.');
+---
+
+<section class="bg-cream-100/70 py-20 sm:py-28" aria-labelledby="visita-title">
+  <div class="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:items-center">
+    <div>
+      <SectionHeading
+        id="visita-title"
+        eyebrow="Visítanos"
+        title="Te esperamos en Sibundoy"
+        highlight="Sibundoy"
+        intro="En el Valle de Sibundoy, Putumayo. Ven por un café, quédate por la conversación."
+      />
+
+      <div class="reveal mt-8 space-y-5 rounded-[2rem] bg-paper p-6 shadow-[0_18px_40px_-30px_rgb(91_58_33/0.5)] ring-1 ring-bark-800/5 sm:p-8">
+        <div class="flex gap-4">
+          <span class="grid size-11 shrink-0 place-items-center rounded-full bg-clay-500/12 text-clay-600"><Icon name="clock" /></span>
+          <TodayHours class="pt-2" />
+        </div>
+        {
+          business.address.street && (
+            <div class="flex gap-4">
+              <span class="grid size-11 shrink-0 place-items-center rounded-full bg-clay-500/12 text-clay-600"><Icon name="map-pin" /></span>
+              <p class="pt-2">
+                {business.address.street}
+                <br />
+                <span class="text-bark-600">{business.address.locality}, {business.address.region}</span>
+              </p>
+            </div>
+          )
+        }
+        <div class="flex flex-col gap-3 pt-2 sm:flex-row">
+          {
+            business.mapsUrl && (
+              <a href={business.mapsUrl} target="_blank" rel="noopener" class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-olive-900 px-6 font-semibold text-cream-50 transition hover:bg-olive-700">
+                <Icon name="map-pin" size={18} /> Cómo llegar
+              </a>
+            )
+          }
+          {
+            wa && (
+              <a href={wa} target="_blank" rel="noopener" class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 font-semibold text-bark-800 ring-1 ring-bark-800/20 transition hover:bg-cream-50">
+                <SocialIcon network="whatsapp" size={18} /> Escríbenos
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Mapa estilizado del Valle (ilustración, no es un mapa real) -->
+    <div class="reveal relative overflow-hidden rounded-[2.5rem] bg-olive-900 shadow-2xl">
+      <svg viewBox="0 0 560 460" class="block w-full" role="img" aria-label="Ilustración del Valle de Sibundoy con la ubicación de Cántaro">
+        <rect width="560" height="460" fill="#2F3E0F" />
+        <path d="M0 210 90 120l70 60 90-110 110 120 80-70 120 110v350H0z" fill="#4A5D1E" />
+        <path d="M0 270 120 190l90 70 110-90 120 100 120-60v290H0z" fill="#6E9E2E" opacity=".55" />
+        <path d="M0 330c120-30 220-10 300 10s180 20 260-10v130H0z" fill="#F1E2C8" opacity=".14" />
+        <g stroke="#F8EEDD" stroke-opacity=".28" stroke-width="3" fill="none" stroke-linecap="round">
+          <path d="M40 380h480M120 330v120M280 320v140M420 330v120M60 430c140-20 300-20 440 0" />
+        </g>
+        <path d="M30 405c100-14 200-34 280-24s150 10 220-10" stroke="#E9A27A" stroke-width="5" stroke-dasharray="2 12" stroke-linecap="round" fill="none" />
+        <g transform="translate(280 310)">
+          <ellipse rx="30" ry="10" fill="#D2652A" opacity=".25" class="map-pulse" />
+          <path d="M0 0C-18-20-24-32-24-42a24 24 0 1 1 48 0c0 10-6 22-24 42z" fill="#D2652A" />
+          <circle cy="-43" r="9" fill="#FFFDF8" />
+        </g>
+        <text x="280" y="236" text-anchor="middle" fill="#F8EEDD" font-family="Fraunces Variable, serif" font-size="30">Cántaro</text>
+        <text x="40" y="70" fill="#F8EEDD" fill-opacity=".7" font-family="Inter Variable, sans-serif" font-size="15" letter-spacing="3">VALLE DE SIBUNDOY</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .map-pulse {
+      transform-origin: center;
+      transform-box: fill-box;
+      animation: map-pulse 2.6s ease-out infinite;
+    }
+  }
+  @keyframes map-pulse {
+    from {
+      transform: scale(0.6);
+      opacity: 0.5;
+    }
+    to {
+      transform: scale(1.8);
+      opacity: 0;
+    }
+  }
+</style>

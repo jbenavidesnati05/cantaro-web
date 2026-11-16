@@ -1,0 +1,74 @@
+---
+// Íconos lucide del sitio (trazo 1.5). Para agregar uno: importarlo y sumarlo al mapa.
+import Amphora from '@lucide/astro/icons/amphora';
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
+import CakeSlice from '@lucide/astro/icons/cake-slice';
+import CalendarDays from '@lucide/astro/icons/calendar-days';
+import ChevronDown from '@lucide/astro/icons/chevron-down';
+import Clock from '@lucide/astro/icons/clock';
+import Coffee from '@lucide/astro/icons/coffee';
+import CupSoda from '@lucide/astro/icons/cup-soda';
+import Droplets from '@lucide/astro/icons/droplets';
+import Flame from '@lucide/astro/icons/flame';
+import Gift from '@lucide/astro/icons/gift';
+import GlassWater from '@lucide/astro/icons/glass-water';
+import HandHeart from '@lucide/astro/icons/hand-heart';
+import HandPlatter from '@lucide/astro/icons/hand-platter';
+import Leaf from '@lucide/astro/icons/leaf';
+import Mail from '@lucide/astro/icons/mail';
+import MapPin from '@lucide/astro/icons/map-pin';
+import Menu from '@lucide/astro/icons/menu';
+import Palette from '@lucide/astro/icons/palette';
+import QrCode from '@lucide/astro/icons/qr-code';
+import Sparkles from '@lucide/astro/icons/sparkles';
+import Spool from '@lucide/astro/icons/spool';
+import Sprout from '@lucide/astro/icons/sprout';
+import Ticket from '@lucide/astro/icons/ticket';
+import Users from '@lucide/astro/icons/users';
+import X from '@lucide/astro/icons/x';
+
+const icons = {
+  amphora: Amphora,
+  'arrow-right': ArrowRight,
+  'arrow-up-right': ArrowUpRight,
+  'cake-slice': CakeSlice,
+  'calendar-days': CalendarDays,
+  'chevron-down': ChevronDown,
+  clock: Clock,
+  coffee: Coffee,
+  'cup-soda': CupSoda,
+  droplets: Droplets,
+  flame: Flame,
+  gift: Gift,
+  'glass-water': GlassWater,
+  'hand-heart': HandHeart,
+  'hand-platter': HandPlatter,
+  leaf: Leaf,
+  mail: Mail,
+  'map-pin': MapPin,
+  menu: Menu,
+  palette: Palette,
+  'qr-code': QrCode,
+  sparkles: Sparkles,
+  spool: Spool,
+  sprout: Sprout,
+  ticket: Ticket,
+  users: Users,
+  x: X,
+};
+
+export type IconName = keyof typeof icons;
+
+interface Props {
+  name?: string | undefined;
+  size?: number;
+  class?: string;
+  strokeWidth?: number;
+}
+
+const { name, size = 20, class: className = '', strokeWidth = 1.5 } = Astro.props;
+const Cmp = name && name in icons ? icons[name as IconName] : Sparkles;
+---
+
+<Cmp size={size} stroke-width={strokeWidth} aria-hidden="true" class={className} />

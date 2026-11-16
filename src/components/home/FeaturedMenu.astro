@@ -1,0 +1,60 @@
+---
+import CategoryIcon from '@/components/brand/CategoryIcon.astro';
+import Icon from '@/components/brand/Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { getMenu, getFeatured, displayPrice } from '@/lib/menu';
+import { formatCOP } from '@/lib/format';
+
+const [featured, menu] = await Promise.all([getFeatured(4), getMenu()]);
+const iconFor = (categoryId: string) => menu.find((c) => c.id === categoryId)?.icon;
+const tints = ['bg-clay-500/15 text-clay-600', 'bg-leaf-500/15 text-olive-700', 'bg-olive-900 text-cream-50', 'bg-clay-300/40 text-bark-800'];
+---
+
+{
+  featured.length > 0 && (
+    <section class="bg-cream-100/70 py-20 sm:py-28" aria-labelledby="carta-title">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <SectionHeading
+            id="carta-title"
+            eyebrow="La carta"
+            title="Recomendados de la casa"
+            highlight="la casa"
+            intro="Algunos de nuestros favoritos. La carta completa está en cada mesa y aquí mismo."
+          />
+          <a
+            href="/menu"
+            class="reveal group inline-flex min-h-12 shrink-0 items-center gap-2 self-start rounded-full bg-olive-900 px-6 font-semibold text-cream-50 transition hover:bg-olive-700 md:self-auto"
+          >
+            Ver toda la carta
+            <Icon name="arrow-right" size={18} class="transition-transform group-hover:translate-x-1" />
+          </a>
+        </div>
+
+        <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {featured.map((p, i) => {
+            const price = displayPrice(p);
+            return (
+              <li class="reveal">
+                <a
+                  href={`/menu#${p.categoryId}`}
+                  class="group flex h-full flex-col rounded-[2rem] bg-paper p-6 shadow-[0_18px_40px_-28px_rgb(91_58_33/0.5)] ring-1 ring-bark-800/5 transition duration-300 hover:-translate-y-1.5"
+                >
+                  <span class:list={['grid size-16 place-items-center rounded-[1.25rem] transition-transform duration-300 group-hover:-rotate-6', tints[i % tints.length]]}>
+                    <CategoryIcon name={iconFor(p.categoryId)} size={30} />
+                  </span>
+                  <h3 class="mt-6 text-2xl leading-tight font-medium">{p.name}</h3>
+                  {p.description && <p class="mt-2 flex-1 text-bark-600">{p.description}</p>}
+                  <p class="mt-5 text-lg font-semibold text-clay-600">
+                    {price.from && <span class="mr-1 text-sm font-normal text-bark-600">desde</span>}
+                    {formatCOP(price.value)}
+                  </p>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
+  )
+}

@@ -1,0 +1,31 @@
+---
+// Encabezado de páginas internas (artesanías, talleres, contacto).
+interface Props {
+  eyebrow: string;
+  title: string;
+  highlight?: string;
+  intro?: string;
+}
+const { eyebrow, title, highlight, intro } = Astro.props;
+const parts = highlight && title.includes(highlight) ? title.split(highlight) : [title];
+---
+
+<section class="mesh-warm grain relative overflow-hidden pt-32 pb-14 sm:pt-40 sm:pb-20">
+  <div class="blob pointer-events-none absolute -top-16 -right-20 size-72 bg-clay-300/40" aria-hidden="true"></div>
+  <div class="relative mx-auto max-w-6xl px-4 sm:px-6">
+    <p class="text-sm font-semibold tracking-[0.18em] text-clay-600 uppercase">{eyebrow}</p>
+    <h1 class="mt-4 max-w-4xl text-[clamp(2.75rem,1.8rem+4.5vw,5.5rem)] leading-[0.98] font-medium tracking-tight">
+      {parts[0]}
+      {
+        parts.length > 1 && (
+          <>
+            <em class="brush-underline font-normal text-clay-600">{highlight}</em>
+            {parts[1]}
+          </>
+        )
+      }
+    </h1>
+    {intro && <p class="mt-6 max-w-2xl text-lg leading-relaxed text-bark-600 sm:text-xl">{intro}</p>}
+    <slot />
+  </div>
+</section>

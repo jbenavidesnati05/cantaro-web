@@ -1,0 +1,32 @@
+---
+import Icon from '@/components/brand/Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { faq } from '@/data/faq';
+---
+
+<section class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28" aria-labelledby="faq-title">
+  <div class="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+    <SectionHeading
+      id="faq-title"
+      eyebrow="Preguntas frecuentes"
+      title="Lo que suelen preguntarnos"
+      highlight="preguntarnos"
+      intro="¿Te quedó alguna duda? Escríbenos por WhatsApp o pregúntanos en la barra."
+    />
+    <div class="reveal divide-y divide-bark-800/10 rounded-[2rem] bg-paper px-6 shadow-[0_18px_40px_-30px_rgb(91_58_33/0.5)] ring-1 ring-bark-800/5 sm:px-8">
+      {
+        faq.map((f) => (
+          <details class="group py-2">
+            <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 text-lg font-medium [&::-webkit-details-marker]:hidden">
+              {f.q}
+              <span class="grid size-9 shrink-0 place-items-center rounded-full bg-cream-100 text-clay-600 transition-transform duration-300 group-open:rotate-180">
+                <Icon name="chevron-down" size={20} />
+              </span>
+            </summary>
+            <p class="pb-4 leading-relaxed text-bark-600">{f.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

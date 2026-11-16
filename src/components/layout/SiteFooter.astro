@@ -1,0 +1,121 @@
+---
+import Logo from '@/components/brand/Logo.astro';
+import SocialIcon from '@/components/brand/SocialIcon.astro';
+import Icon from '@/components/brand/Icon.astro';
+import { business } from '@/data/business';
+import { NAV_LINKS } from '@/data/nav';
+import { groupedHours } from '@/lib/schedule';
+import { waLink, formatPhone } from '@/lib/whatsapp';
+
+const year = new Date().getFullYear();
+const wa = waLink();
+const socials = (['instagram', 'facebook', 'tiktok'] as const)
+  .map((n) => ({ network: n, url: business.social[n] }))
+  .filter((s): s is { network: typeof s.network; url: string } => s.url !== null);
+const label = (n: string) => n[0]!.toUpperCase() + n.slice(1);
+---
+
+<footer class="grain relative bg-olive-900 text-cream-100">
+  <!-- Onda superior (se dibuja en verde sobre la sección anterior, sin importar su color) -->
+  <svg class="absolute bottom-[calc(100%-1px)] left-0 h-10 w-full text-olive-900 sm:h-14" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 60V34C240 4 480 0 720 22s480 34 720 4v34z" fill="currentColor"></path>
+  </svg>
+
+  <div class="mx-auto grid max-w-6xl gap-12 px-4 pt-14 pb-10 sm:px-6 md:grid-cols-2 lg:grid-cols-4">
+    <div class="lg:col-span-1">
+      <Logo size={88} loading="lazy" class="ring-4 ring-cream-50/10" />
+      <p class="mt-5 font-display text-2xl text-cream-50">{business.tagline}</p>
+      <p class="mt-2 text-cream-100/75">Café · Artesanías · Talleres<br />{business.address.locality}, {business.address.region}</p>
+    </div>
+
+    <nav aria-label="Pie de página">
+      <h2 class="font-sans text-sm font-semibold tracking-[0.18em] text-clay-300 uppercase">Explora</h2>
+      <ul class="mt-4 space-y-1">
+        <li><a href="/" class="footer-link">Inicio</a></li>
+        {NAV_LINKS.map((l) => <li><a href={l.href} class="footer-link">{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="font-sans text-sm font-semibold tracking-[0.18em] text-clay-300 uppercase">Horario</h2>
+      {
+        business.hours && (
+          <ul class="mt-4 space-y-1.5">
+            {groupedHours(business.hours).map((g) => (
+              <li>
+                <span class="text-cream-50">{g.days}</span>
+                <br />
+                <span class="text-cream-100/75">{g.hours}</span>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    <div>
+      <h2 class="font-sans text-sm font-semibold tracking-[0.18em] text-clay-300 uppercase">Contacto</h2>
+      <ul class="mt-4 space-y-1">
+        {
+          business.address.street && (
+            <li class="flex gap-2 py-2">
+              <Icon name="map-pin" size={20} class="mt-0.5 shrink-0 text-clay-300" />
+              <span>{business.address.street}<br />{business.address.locality}, {business.address.region}</span>
+            </li>
+          )
+        }
+        {
+          wa && business.whatsapp && (
+            <li>
+              <a href={wa} target="_blank" rel="noopener" class="footer-link gap-2">
+                <SocialIcon network="whatsapp" size={20} class="text-clay-300" />
+                {formatPhone(business.whatsapp)}
+              </a>
+            </li>
+          )
+        }
+        <li>
+          <a href={`mailto:${business.email}`} class="footer-link gap-2">
+            <Icon name="mail" size={20} class="text-clay-300" />
+            {business.email}
+          </a>
+        </li>
+      </ul>
+      <div class="mt-4 flex gap-2">
+        {
+          socials.map((s) => (
+            <a
+              href={s.url}
+              target="_blank"
+              rel="noopener"
+              aria-label={`${business.shortName} en ${label(s.network)}`}
+              class="grid size-11 place-items-center rounded-full bg-white/10 text-cream-50 transition hover:bg-clay-500"
+            >
+              <SocialIcon network={s.network} />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="border-t border-white/10">
+    <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-sm text-cream-100/70 sm:flex-row sm:justify-between sm:px-6">
+      <p>© {year} {business.name}. Hecho con las manos en el Valle de Sibundoy.</p>
+      <p><a href="/menu" class="underline-offset-4 hover:underline">cantaroarte.com/menu</a></p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-link {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    color: var(--color-cream-100);
+    transition: color 0.2s;
+  }
+  .footer-link:hover {
+    color: var(--color-clay-300);
+  }
+</style>

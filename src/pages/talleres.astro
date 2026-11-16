@@ -1,0 +1,90 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import Icon from '@/components/brand/Icon.astro';
+import WorkshopTicket from '@/components/talleres/WorkshopTicket.astro';
+import SectionHeading from '@/components/home/SectionHeading.astro';
+import { getUpcomingWorkshops } from '@/lib/catalog';
+import { waLink } from '@/lib/whatsapp';
+
+const workshops = await getUpcomingWorkshops();
+const hasDemo = workshops.some((w) => w.demo);
+
+// SUPUESTO — proceso de inscripción pendiente de confirmar
+const steps = [
+  { icon: 'calendar-days', title: 'Elige tu taller', text: 'Mira el calendario y escoge el que más te llame.' },
+  { icon: 'mail', title: 'Escríbenos', text: 'Reserva por WhatsApp. Los cupos son pocos para que todos aprendan bien.' },
+  { icon: 'palette', title: 'Ven a crear', text: 'Llega con ganas: los materiales y algo rico para tomar van por nuestra cuenta.' },
+];
+const wa = waLink('¡Hola, Cántaro! Quiero proponer o reservar un taller privado.');
+---
+
+<PageLayout
+  title="Talleres"
+  description="Talleres creativos en Cántaro, Sibundoy: velas, cerámica, macramé y más. Sin experiencia previa, materiales incluidos."
+>
+  <PageHero
+    eyebrow="Talleres creativos"
+    title="Una tarde para crear con las manos"
+    highlight="crear"
+    intro="Una vez al mes nos reunimos a aprender algo nuevo: velas, cerámica, tejidos. Grupos pequeños, materiales incluidos y una bebida caliente."
+  />
+
+  <div class="mx-auto max-w-5xl space-y-6 px-4 py-16 sm:px-6 sm:py-24">
+    {
+      hasDemo && (
+        <p class="rounded-2xl bg-clay-300/25 px-4 py-3 text-bark-800" role="note">
+          Calendario de ejemplo: las fechas reales se publicarán pronto.
+        </p>
+      )
+    }
+    <h2 class="sr-only">Próximos talleres</h2>
+    {
+      workshops.length > 0 ? (
+        workshops.map((w) => <WorkshopTicket workshop={w} />)
+      ) : (
+        <div class="rounded-[2rem] border-2 border-dashed border-clay-500/40 bg-paper/60 p-10 text-center">
+          <p class="font-display text-4xl">Muy pronto</p>
+          <p class="mt-3 text-bark-600">Estamos preparando el próximo taller. Síguenos en redes para enterarte primero.</p>
+        </div>
+      )
+    }
+  </div>
+
+  <section class="bg-cream-100/70 py-20 sm:py-28" aria-labelledby="como-title">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <SectionHeading id="como-title" eyebrow="Cómo funciona" title="Reservar es muy fácil" highlight="muy fácil" align="center" />
+      <ol class="mt-12 grid gap-4 md:grid-cols-3">
+        {
+          steps.map((s, i) => (
+            <li class="reveal relative rounded-[2rem] bg-paper p-7 ring-1 ring-bark-800/5">
+              <span class="absolute top-6 right-7 font-display text-6xl text-clay-500/20" aria-hidden="true">{i + 1}</span>
+              <span class="grid size-12 place-items-center rounded-full bg-clay-500/12 text-clay-600"><Icon name={s.icon} size={24} /></span>
+              <h3 class="mt-5 text-2xl font-medium">{s.title}</h3>
+              <p class="mt-2 text-bark-600">{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+    <div class="reveal grain relative overflow-hidden rounded-[2.5rem] bg-olive-900 p-8 text-cream-50 sm:p-14">
+      <div class="blob pointer-events-none absolute -top-16 -right-16 size-64 bg-clay-500/25" aria-hidden="true"></div>
+      <div class="relative max-w-2xl">
+        <h2 class="text-4xl font-medium text-cream-50 sm:text-5xl">¿Un taller para tu grupo?</h2>
+        <p class="mt-4 text-lg text-cream-100/85">
+          Cumpleaños, equipos de trabajo, colegios o amigas que quieren una tarde distinta. Armamos un taller privado a la medida.
+        </p>
+        {
+          wa && (
+            <a href={wa} target="_blank" rel="noopener" class="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-clay-500 px-6 font-semibold text-cream-50 transition hover:bg-clay-600">
+              Cotizar taller privado <Icon name="arrow-up-right" size={18} />
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </section>
+</PageLayout>

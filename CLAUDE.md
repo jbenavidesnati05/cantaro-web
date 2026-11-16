@@ -9,6 +9,7 @@ El contexto completo de negocio, diseño y alcance está en **`docs/CONTEXTO.md`
 - **Banner** (`src/assets/brand/banner.png`): es una escena ilustrada, no una foto del local. Uso permitido: imagen Open Graph / decorativa, sin presentarla como foto real.
 - **Paleta:** se agrega `leaf-500` (verde hoja del logo) como acento.
 - **Supuestos en vez de huecos:** el dueño prefiere textos y datos de ejemplo verosímiles (horarios, dirección, WhatsApp, carta, taller) en lugar de bloques vacíos. Todo dato supuesto va **marcado en código** (`demo: true` en productos, comentario `// SUPUESTO` en `business.ts`) y listado en el README para reemplazarlo antes de publicar. Mientras se trabaja en local, los `demo` se muestran; la variable `PUBLIC_SHOW_DEMO` controla si se muestran en build.
+- **Alcance:** el sitio es una landing completa del negocio; `/menu` es una sección más (la del QR). Fase 1 incluye `/`, `/menu`, `/artesanias`, `/talleres`, `/contacto` y `/404`. Artesanías y talleres viven en `src/content/{artesanias,talleres}/` y se leen vía `src/lib/catalog.ts`; preguntas frecuentes en `src/data/faq.ts`.
 - **Trabajo en `main`.** Primero todo en local; el despliegue a Cloudflare Pages se hace después.
 
 ## Objetivo actual (fase 1)
