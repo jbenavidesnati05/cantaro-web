@@ -1,0 +1,15 @@
+// Configuración de Cloudflare Workers (sitio estático con "static assets").
+// El nombre debe coincidir con el Worker creado en el panel: cantaro-web.
+// Los dominios (cantaroarte.com y www) se agregan en el panel: Worker → Configuración → Dominios y rutas.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cantaro-web",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    // Sirve dist/404.html ("Este cántaro está vacío") en rutas inexistentes.
+    "not_found_handling": "404-page",
+    // /menu → menu.html sin barra final (la URL del QR queda limpia).
+    "html_handling": "auto-trailing-slash"
+  }
+}

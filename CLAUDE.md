@@ -12,7 +12,7 @@ El contexto completo de negocio, diseño y alcance está en **`docs/CONTEXTO.md`
 - **Alcance:** el sitio es una landing completa del negocio; `/menu` es una sección más (la del QR). Fase 1 incluye `/`, `/menu`, `/artesanias`, `/talleres`, `/contacto` y `/404`. Artesanías y talleres viven en `src/content/{artesanias,talleres}/` y se leen vía `src/lib/catalog.ts`; preguntas frecuentes en `src/data/faq.ts`.
 - **Imágenes provisionales (16 nov 2026):** se permiten fotos con licencia libre (Unsplash) de producto/detalle —nunca de personas, fachadas ni interiores que parezcan el local— y recortes del banner de marca (`src/assets/scenes/`). Toda imagen de terceros se registra en `CREDITS.md`. Prohibido usar recursos de los proyectos de referencia sin licencia (p. ej. el sitio con marca Starbucks).
 - **Efectos:** `src/scripts/effects.ts` (sin dependencias): texto letra por letra, parallax, escena del cántaro ligada al scroll, historia con imagen fija. No agregar GSAP/Lenis; todo respeta `prefers-reduced-motion`.
-- **Publicación (16 nov 2026):** el dueño decidió publicar los ejemplos con aviso (`.env.production` → `PUBLIC_SHOW_DEMO=true`) y la dirección/horario supuestos tal cual. WhatsApp real: +57 310 3831420. Deploy: GitHub `main` → Cloudflare Pages (Git integration).
+- **Publicación (16 nov 2026):** el dueño decidió publicar los ejemplos con aviso (`.env.production` → `PUBLIC_SHOW_DEMO=true`) y la dirección/horario supuestos tal cual. WhatsApp real: +57 310 3831420. Deploy: GitHub `main` → Cloudflare **Workers** (Workers Builds, static assets) con `wrangler.jsonc`; worker `cantaro-web`.
 - **Trabajo en `main`.** Primero todo en local; el despliegue a Cloudflare Pages se hace después.
 
 ## Objetivo actual (fase 1)

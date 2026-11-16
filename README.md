@@ -64,7 +64,7 @@ Astro las optimiza solo (WebP, varios tamaños). Las imágenes de terceros se re
 
 ## Publicar
 
-Cada `git push` a `main` publica el sitio en Cloudflare Pages en 1–2 minutos. **El QR no cambia nunca.**
+Cada `git push` a `main` publica el sitio en **Cloudflare Workers** (Workers Builds) en 1–2 minutos. **El QR no cambia nunca.**
 
 ```bash
 git add -A
@@ -72,12 +72,11 @@ git commit -m "carta: nuevos precios"
 git push
 ```
 
-### Configuración de Cloudflare Pages (una sola vez)
-1. Cloudflare → **Workers & Pages** → **Create** → pestaña **Pages** → **Connect to Git** → repositorio `cantaro-web`.
-2. Framework preset: **Astro** · Build command: `npm run build` · Build output directory: `dist`.
-3. Guardar y desplegar. La versión de Node se toma de `.node-version`.
-4. En el proyecto → **Custom domains** → agregar `cantaroarte.com` y `www.cantaroarte.com`.
-5. (Opcional) **Web Analytics** → activar para el sitio (sin cookies).
+- Worker: `cantaro-web` → https://cantaro-web.jbenavidesnati05.workers.dev
+- Configuración: `wrangler.jsonc` (sitio estático desde `dist/`, página 404 propia).
+- Dominios: en el panel, **Workers y Pages → cantaro-web → Configuración → Dominios y rutas → Agregar → Dominio personalizado**:
+  `cantaroarte.com` y `www.cantaroarte.com`.
+- Compilación (panel → Configuración → Compilación): comando `npm run build`, despliegue `npx wrangler deploy`.
 
 ### Contenido de ejemplo
 `.env.production` tiene `PUBLIC_SHOW_DEMO=true`: los productos, artesanías y talleres con `"demo": true`
