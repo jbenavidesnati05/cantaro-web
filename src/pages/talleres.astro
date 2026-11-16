@@ -6,6 +6,7 @@ import WorkshopTicket from '@/components/talleres/WorkshopTicket.astro';
 import SectionHeading from '@/components/home/SectionHeading.astro';
 import { getUpcomingWorkshops } from '@/lib/catalog';
 import { waLink } from '@/lib/whatsapp';
+import pinceles from '@/assets/scenes/pinceles.jpg';
 
 const workshops = await getUpcomingWorkshops();
 const hasDemo = workshops.some((w) => w.demo);
@@ -28,6 +29,8 @@ const wa = waLink('¡Hola, Cántaro! Quiero proponer o reservar un taller privad
     title="Una tarde para crear con las manos"
     highlight="crear"
     intro="Una vez al mes nos reunimos a aprender algo nuevo: velas, cerámica, tejidos. Grupos pequeños, materiales incluidos y una bebida caliente."
+    image={pinceles}
+    imageAlt="Pinceles en un vaso de madera"
   />
 
   <div class="mx-auto max-w-5xl space-y-6 px-4 py-16 sm:px-6 sm:py-24">

@@ -1,15 +1,13 @@
 ---
+import { Image } from 'astro:assets';
 import Icon from '@/components/brand/Icon.astro';
 import SectionHeading from './SectionHeading.astro';
 import { CRAFT_CATEGORIES } from '@/lib/catalog';
+import { getAssetImage } from '@/lib/images';
 
-const tones = [
-  'bg-clay-500/12 text-clay-600',
-  'bg-leaf-500/15 text-olive-700',
-  'bg-clay-300/35 text-bark-800',
-  'bg-olive-900/90 text-cream-50',
-  'bg-cream-100 text-clay-600',
-];
+const cards = await Promise.all(CRAFT_CATEGORIES.map(async (c) => ({ ...c, img: await getAssetImage(c.image) })));
+// Galería asimétrica en escritorio: 2 grandes arriba, 3 abajo.
+const spans = ['lg:col-span-3 lg:aspect-[16/11]', 'lg:col-span-3 lg:aspect-[16/11]', 'lg:col-span-2', 'lg:col-span-2', 'lg:col-span-2'];
 ---
 
 <section class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28" aria-labelledby="artesanias-title">
@@ -30,19 +28,34 @@ const tones = [
     </a>
   </div>
 
-  <ul class="no-scrollbar -mx-4 mt-12 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-4 md:mx-0 md:grid md:grid-cols-5 md:overflow-visible md:px-0">
+  <ul class="no-scrollbar -mx-4 mt-12 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-4 lg:mx-0 lg:grid lg:grid-cols-6 lg:overflow-visible lg:px-0">
     {
-      CRAFT_CATEGORIES.map((c, i) => (
-        <li class="reveal w-[72%] shrink-0 snap-start sm:w-[45%] md:w-auto">
+      cards.map((c, i) => (
+        <li class:list={['reveal w-[78%] shrink-0 snap-start sm:w-[46%] lg:w-auto', spans[i]]}>
           <a
             href={`/artesanias#${c.id}`}
-            class="group flex h-full flex-col rounded-[2rem] bg-paper p-6 shadow-[0_18px_40px_-28px_rgb(91_58_33/0.5)] ring-1 ring-bark-800/5 transition duration-300 hover:-translate-y-1.5 hover:rotate-[0.6deg]"
+            class="group relative flex aspect-[4/5] h-full w-full items-end overflow-hidden rounded-[2rem] bg-bark-800 shadow-[0_24px_50px_-30px_rgb(91_58_33/0.7)] transition duration-500 hover:-translate-y-1.5 hover:rotate-[0.4deg] lg:aspect-auto lg:min-h-[19rem]"
           >
-            <span class:list={['blob grid size-20 place-items-center [animation-duration:20s]', tones[i % tones.length]]}>
-              <Icon name={c.icon} size={34} />
+            {c.img && (
+              <span class="zoom-img absolute inset-0">
+                <Image src={c.img} alt="" widths={[360, 640]} sizes="(min-width: 1024px) 33vw, 78vw" class="size-full object-cover" />
+              </span>
+            )}
+            <span class="absolute inset-0 bg-gradient-to-t from-[#2a1a0e]/90 via-[#2a1a0e]/25 to-transparent" aria-hidden="true" />
+            <span class="relative w-full p-6 text-cream-50">
+              <span class="mb-3 grid size-11 place-items-center rounded-full bg-paper/20 backdrop-blur-md">
+                <Icon name={c.icon} size={22} />
+              </span>
+              <span class="flex items-end justify-between gap-3">
+                <span>
+                  <span class="block font-display text-3xl">{c.name}</span>
+                  <span class="mt-1 block max-w-xs text-cream-100/85">{c.blurb}</span>
+                </span>
+                <span class="grid size-11 shrink-0 place-items-center rounded-full bg-clay-500 transition-transform duration-500 group-hover:-rotate-45">
+                  <Icon name="arrow-right" size={20} />
+                </span>
+              </span>
             </span>
-            <h3 class="mt-6 text-2xl font-medium">{c.name}</h3>
-            <p class="mt-2 text-bark-600">{c.blurb}</p>
           </a>
         </li>
       ))

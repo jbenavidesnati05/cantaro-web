@@ -5,11 +5,16 @@ import Icon from '@/components/brand/Icon.astro';
 import { CRAFT_CATEGORIES, getCrafts } from '@/lib/catalog';
 import { formatCOP } from '@/lib/format';
 import { waLink } from '@/lib/whatsapp';
+import { getAssetImage } from '@/lib/images';
+import { Image } from 'astro:assets';
+import bodegon from '@/assets/scenes/bodegon-artesanal.jpg';
 
 const crafts = await getCrafts();
-const groups = CRAFT_CATEGORIES.map((c) => ({ ...c, items: crafts.filter((i) => i.category === c.id) })).filter(
-  (g) => g.items.length > 0,
-);
+const groups = (
+  await Promise.all(
+    CRAFT_CATEGORIES.map(async (c) => ({ ...c, img: await getAssetImage(c.image), items: crafts.filter((i) => i.category === c.id) })),
+  )
+).filter((g) => g.items.length > 0);
 const hasDemo = crafts.some((c) => c.demo);
 const tones = ['bg-clay-500/12 text-clay-600', 'bg-leaf-500/15 text-olive-700', 'bg-clay-300/35 text-bark-800', 'bg-olive-900 text-cream-50', 'bg-cream-100 text-clay-600'];
 ---
@@ -23,6 +28,8 @@ const tones = ['bg-clay-500/12 text-clay-600', 'bg-leaf-500/15 text-olive-700', 
     title="Objetos hechos con las manos"
     highlight="las manos"
     intro="Velas, esencias, textiles y cerámica en pequeñas cantidades. Todas las piezas están en el local; pregúntanos por WhatsApp si quieres apartar una."
+    image={bodegon}
+    imageAlt="Bodegón con velas, cerámica pintada, esencias y macramé"
   >
     <nav aria-label="Categorías de artesanías" class="mt-8 flex flex-wrap gap-2">
       {
@@ -47,18 +54,27 @@ const tones = ['bg-clay-500/12 text-clay-600', 'bg-leaf-500/15 text-olive-700', 
 
     {
       groups.map((g, gi) => (
-        <section id={g.id} class="scroll-mt-28" aria-labelledby={`${g.id}-t`}>
-          <div class="reveal flex items-center gap-4">
-            <span class:list={['blob grid size-14 place-items-center [animation-duration:20s]', tones[gi % tones.length]]}>
-              <Icon name={g.icon} size={26} />
-            </span>
-            <div>
-              <h2 id={`${g.id}-t`} class="text-4xl font-medium">{g.name}</h2>
-              <p class="text-bark-600">{g.blurb}</p>
+        <section id={g.id} class="grid scroll-mt-28 gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10" aria-labelledby={`${g.id}-t`}>
+          {/* Imagen de la categoría (fija al hacer scroll en escritorio) */}
+          <div class="lg:sticky lg:top-28 lg:self-start">
+            <div class="reveal group relative flex aspect-[16/10] items-end overflow-hidden rounded-[2rem] bg-bark-800 lg:aspect-[4/5]">
+              {g.img && (
+                <span class="zoom-img absolute inset-0">
+                  <Image src={g.img} alt="" widths={[400, 700]} sizes="(min-width: 1024px) 26rem, 100vw" class="size-full object-cover" />
+                </span>
+              )}
+              <span class="absolute inset-0 bg-gradient-to-t from-[#2a1a0e]/90 via-[#2a1a0e]/20 to-transparent" aria-hidden="true" />
+              <div class="relative p-6 text-cream-50">
+                <span class="mb-3 grid size-11 place-items-center rounded-full bg-paper/20 backdrop-blur-md">
+                  <Icon name={g.icon} size={22} />
+                </span>
+                <h2 id={`${g.id}-t`} class="text-4xl font-medium text-cream-50">{g.name}</h2>
+                <p class="mt-1 text-cream-100/85">{g.blurb}</p>
+              </div>
             </div>
           </div>
 
-          <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ul class="grid content-start gap-4 sm:grid-cols-2">
             {g.items.map((item) => {
               const price = formatCOP(item.priceCOP);
               const wa = waLink(`¡Hola, Cántaro! Me interesa "${item.name}". ¿Está disponible?`);

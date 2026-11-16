@@ -35,6 +35,8 @@
   }
   body {
     @apply bg-cream-50 font-sans text-base text-bark-800 antialiased;
+    /* clip (no hidden) evita el scroll horizontal sin romper position: sticky */
+    overflow-x: clip;
   }
   h1, h2, h3 {
     @apply font-display text-bark-800;
@@ -125,6 +127,57 @@
 @keyframes reveal-up {
   from { opacity: 0; transform: translateY(32px); }
   to { opacity: 1; transform: none; }
+}
+
+/* Texto letra por letra (src/scripts/effects.ts) */
+.split-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+.is-split .split-char {
+  display: inline-block;
+  animation: char-in 0.8s cubic-bezier(0.2, 0.9, 0.25, 1.2) both;
+  animation-delay: calc(var(--i) * 32ms + var(--split-delay, 0ms));
+}
+@keyframes char-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.6em) rotate(6deg) scale(0.6);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Granos de café flotando */
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) rotate(var(--r, 0deg)); }
+  50% { transform: translate(var(--dx, 12px), var(--dy, -40px)) rotate(calc(var(--r, 0deg) + 25deg)); }
+}
+.bean {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bean > img {
+    animation: drift var(--t, 9s) ease-in-out infinite;
+  }
+}
+
+/* Imagen con zoom suave al pasar el cursor */
+.zoom-img {
+  overflow: hidden;
+}
+.zoom-img img {
+  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.group:hover .zoom-img img,
+.zoom-img:hover img {
+  transform: scale(1.07);
 }
 
 /* Subrayado "pintado a mano" */

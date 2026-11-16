@@ -1,55 +1,120 @@
 ---
+/**
+ * Historia con imagen fija que cambia según el bloque de texto activo (efecto "pinned photo swap").
+ * En celular, cada bloque lleva su imagen en línea.
+ */
+import { Image } from 'astro:assets';
 import Icon from '@/components/brand/Icon.astro';
 import LeafDivider from '@/components/brand/LeafDivider.astro';
+import vasija from '@/assets/scenes/vasija-ceramica.jpg';
+import matera from '@/assets/scenes/matera-hojas.jpg';
+import cafeNegro from '@/assets/photos/cafe-negro.jpg';
 
-const values = [
-  { icon: 'hand-heart', title: 'Hecho a mano', text: 'Cada pieza y cada taza pasan por manos que cuidan el detalle.' },
-  { icon: 'users', title: 'Para compartir', text: 'Una mesa larga, una conversación, algo rico en el centro.' },
-  { icon: 'sprout', title: 'Quédate un rato', text: 'Aquí nadie te apura. El tiempo también se disfruta.' },
+const blocks = [
+  {
+    eyebrow: 'Por qué Cántaro',
+    quote: '“Un cántaro guarda lo que importa y lo comparte con quien llega.”',
+    body: 'El cántaro es la vasija de barro de toda la vida: se hace a mano, guarda el agua, el café o la chicha, y se pone en el centro de la mesa para que todos se sirvan. Por eso nos llamamos así.',
+    img: vasija,
+    alt: 'Vasija de barro pintada con hojas',
+  },
+  {
+    eyebrow: 'Nuestro origen',
+    title: 'De las manualidades a la mesa',
+    body: 'Cántaro nació como un proyecto de manualidades y capacitación. Hoy crecimos a un espacio en Sibundoy donde se juntan tres cosas que nos encantan: un buen café, los objetos hechos a mano y aprender creando.',
+    img: matera,
+    alt: 'Matera de cerámica con una planta',
+  },
+  {
+    eyebrow: 'Cómo nos gusta recibirte',
+    title: 'Sin afán, con calma',
+    body: 'Una mesa, una conversación y algo rico en el centro. Aquí nadie te apura: el tiempo también se disfruta.',
+    values: [
+      { icon: 'hand-heart', label: 'Hecho a mano' },
+      { icon: 'users', label: 'Para compartir' },
+      { icon: 'sprout', label: 'Quédate un rato' },
+    ],
+    img: cafeNegro,
+    alt: 'Taza de café negro vista desde arriba',
+  },
 ];
 ---
 
-<section id="nosotros" class="grain relative scroll-mt-24 overflow-hidden bg-olive-900 py-20 text-cream-100 sm:py-28" aria-labelledby="historia-title">
-  <div class="blob pointer-events-none absolute -top-24 -right-24 size-80 bg-olive-700/60" aria-hidden="true"></div>
-  <div class="blob pointer-events-none absolute -bottom-32 -left-20 size-72 bg-clay-500/15 [animation-delay:-6s]" aria-hidden="true"></div>
+<section id="nosotros" class="grain relative scroll-mt-24 overflow-x-clip bg-olive-900 text-cream-100" aria-labelledby="historia-title" data-swap>
+  <div class="blob pointer-events-none absolute top-10 -right-24 size-80 bg-olive-700/60" aria-hidden="true"></div>
+  <h2 id="historia-title" class="sr-only">Nuestra historia</h2>
 
-  <div class="relative mx-auto grid max-w-6xl gap-14 px-4 sm:px-6 lg:grid-cols-2 lg:gap-20">
-    <div class="reveal">
-      <p class="text-sm font-semibold tracking-[0.18em] text-clay-300 uppercase">Nuestra historia</p>
-      <h2 id="historia-title" class="sr-only">Por qué nos llamamos Cántaro</h2>
-      <blockquote class="mt-6">
-        <p class="font-display text-[clamp(2rem,1.4rem+3vw,3.5rem)] leading-[1.08] text-cream-50 italic">
-          “Un cántaro guarda lo que importa y lo comparte con quien llega.”
-        </p>
-      </blockquote>
-      <LeafDivider class="mt-10 justify-start text-clay-300" />
+  <div class="relative mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_0.9fr] lg:gap-20">
+    <div class="py-20 lg:py-[12vh]">
+      {
+        blocks.map((b, i) => (
+          <article class="flex flex-col justify-center py-10 lg:min-h-[78vh]" data-swap-text>
+            <div class="mb-8 overflow-hidden rounded-[2rem] lg:hidden">
+              <Image src={b.img} alt={b.alt} widths={[400, 700]} sizes="100vw" class="aspect-[4/3] w-full object-cover" />
+            </div>
+            <p class="reveal flex items-center gap-3 text-sm font-semibold tracking-[0.18em] text-clay-300 uppercase">
+              <span class="font-display text-2xl tracking-normal text-cream-50/40">0{i + 1}</span>
+              {b.eyebrow}
+            </p>
+            {b.quote && (
+              <blockquote class="reveal mt-6">
+                <p class="font-display text-[clamp(2rem,1.4rem+3vw,3.5rem)] leading-[1.08] text-cream-50 italic">{b.quote}</p>
+              </blockquote>
+            )}
+            {b.title && <h3 class="reveal mt-6 text-[clamp(2rem,1.4rem+3vw,3.5rem)] leading-[1.05] font-medium text-cream-50">{b.title}</h3>}
+            <p class="reveal mt-6 max-w-lg text-lg leading-relaxed text-cream-100/85">{b.body}</p>
+            {b.values && (
+              <ul class="reveal mt-8 flex flex-wrap gap-3">
+                {b.values.map((v) => (
+                  <li class="inline-flex items-center gap-2 rounded-full bg-white/[0.07] px-4 py-2.5 ring-1 ring-white/10">
+                    <Icon name={v.icon} size={18} class="text-clay-300" />
+                    {v.label}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {i === 0 && <LeafDivider class="reveal mt-10 justify-start text-clay-300" />}
+          </article>
+        ))
+      }
     </div>
 
-    <div class="reveal space-y-5 text-lg leading-relaxed">
-      <p>
-        El cántaro es la vasija de barro de toda la vida: se hace a mano, guarda el agua, el café o la chicha, y se pone
-        en el centro de la mesa para que todos se sirvan. Por eso nos llamamos así.
-      </p>
-      <p>
-        Cántaro nació como un proyecto de manualidades y capacitación. Hoy crecimos a un espacio en Sibundoy donde se
-        juntan tres cosas que nos encantan: <strong class="font-semibold text-cream-50">un buen café, los objetos hechos
-        a mano y aprender creando</strong>.
-      </p>
-      <p>Te esperamos para que lo conozcas, con calma y sin afán.</p>
+    <!-- Columna fija con las imágenes (escritorio) -->
+    <div class="hidden lg:block">
+      <div class="sticky top-0 flex h-dvh items-center">
+        <div class="relative aspect-[4/5] w-full overflow-hidden rounded-t-full rounded-b-[2.5rem] shadow-[0_40px_80px_-30px_rgb(0_0_0/0.6)] ring-8 ring-white/5">
+          {
+            blocks.map((b, i) => (
+              <div class="swap-img absolute inset-0" data-swap-img style={`z-index:${i}`}>
+                <Image src={b.img} alt={b.alt} widths={[500, 800]} sizes="40vw" class="size-full object-cover" />
+              </div>
+            ))
+          }
+        </div>
+      </div>
     </div>
   </div>
-
-  <ul class="relative mx-auto mt-16 grid max-w-6xl gap-4 px-4 sm:px-6 md:grid-cols-3">
-    {
-      values.map((v) => (
-        <li class="reveal rounded-[2rem] bg-white/[0.06] p-7 ring-1 ring-white/10 backdrop-blur-sm">
-          <span class="grid size-12 place-items-center rounded-full bg-clay-500/20 text-clay-300">
-            <Icon name={v.icon} size={24} />
-          </span>
-          <h3 class="mt-5 text-2xl text-cream-50">{v.title}</h3>
-          <p class="mt-2 text-cream-100/80">{v.text}</p>
-        </li>
-      ))
-    }
-  </ul>
 </section>
+
+<style>
+  .swap-img {
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 0.9s cubic-bezier(0.7, 0, 0.2, 1);
+  }
+  .swap-img img {
+    transform: scale(1.15);
+    transition: transform 1.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .swap-img[data-active] {
+    clip-path: inset(0 0 0 0);
+  }
+  .swap-img[data-active] img {
+    transform: scale(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .swap-img,
+    .swap-img img {
+      transition: none;
+    }
+  }
+</style>

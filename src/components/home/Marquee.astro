@@ -1,8 +1,9 @@
 ---
 const words = ['Café', 'Velas', 'Cerámica', 'Aromáticas', 'Textiles', 'Talleres', 'Tortas', 'Esencias'];
+const words2 = ['Hecho a mano', 'Para compartir', 'Quédate un rato', 'Valle de Sibundoy'];
 ---
 
-<section class="overflow-hidden bg-olive-900 py-5 text-cream-50 sm:py-7" aria-label="Lo que encuentras en Cántaro">
+<section class="relative z-10 -my-px overflow-hidden bg-olive-900 py-5 text-cream-50 sm:py-7" aria-label="Lo que encuentras en Cántaro">
   <p class="sr-only">{words.join(', ')}</p>
   <div class="marquee flex w-max" aria-hidden="true">
     {
@@ -20,12 +21,31 @@ const words = ['Café', 'Velas', 'Cerámica', 'Aromáticas', 'Textiles', 'Taller
       ))
     }
   </div>
+  <div class="marquee marquee-rev mt-3 flex w-max sm:mt-4" aria-hidden="true">
+    {
+      [0, 1, 2].map(() => (
+        <ul class="flex shrink-0 items-center">
+          {words2.map((w) => (
+            <li class="outline-text px-6 font-display text-2xl font-semibold tracking-wide uppercase sm:px-10 sm:text-4xl">{w} ·</li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
 </section>
 
 <style>
+  .outline-text {
+    color: transparent;
+    -webkit-text-stroke: 1px rgb(248 238 221 / 0.45);
+  }
   @media (prefers-reduced-motion: no-preference) {
     .marquee {
       animation: marquee 38s linear infinite;
+    }
+    .marquee-rev {
+      animation-duration: 46s;
+      animation-direction: reverse;
     }
     .marquee:hover {
       animation-play-state: paused;

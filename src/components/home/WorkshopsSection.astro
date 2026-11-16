@@ -4,6 +4,8 @@ import SectionHeading from './SectionHeading.astro';
 import WorkshopTicket from '@/components/talleres/WorkshopTicket.astro';
 import { formatDateParts } from '@/lib/format';
 import type { Workshop } from '@/lib/catalog';
+import { Image } from 'astro:assets';
+import pinceles from '@/assets/scenes/pinceles.jpg';
 
 interface Props {
   workshops: Workshop[];
@@ -50,7 +52,14 @@ const [next, ...rest] = workshops;
 
     {
       next ? (
-        <WorkshopTicket workshop={next} />
+        <div class="relative">
+          <div class="reveal absolute -top-20 -right-2 z-0 hidden w-36 rotate-6 overflow-hidden rounded-[1.5rem] shadow-xl ring-4 ring-paper sm:block lg:-top-24" data-parallax="0.1">
+            <Image src={pinceles} alt="" width={288} height={360} class="aspect-[4/5] w-full object-cover" />
+          </div>
+          <div class="relative z-10">
+            <WorkshopTicket workshop={next} />
+          </div>
+        </div>
       ) : (
         <div class="reveal rounded-[2rem] border-2 border-dashed border-clay-500/40 bg-paper/60 p-10 text-center">
           <p class="font-display text-4xl">Muy pronto</p>

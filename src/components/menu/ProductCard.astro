@@ -1,9 +1,9 @@
 ---
 import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
 import Badge from './Badge.astro';
 import PriceTag from './PriceTag.astro';
 import { displayPrice, type Product } from '@/lib/menu';
+import { getAssetImage } from '@/lib/images';
 
 interface Props {
   product: Product;
@@ -13,10 +13,8 @@ const soldOut = !product.available;
 const price = displayPrice(product);
 const hasVariants = (product.variants?.length ?? 0) > 0;
 
-// Imágenes opcionales en src/assets/menu/<archivo>. Si no existe, la tarjeta funciona sin imagen.
-const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/menu/*.{jpg,jpeg,png,webp,avif}');
-const imageLoader = product.image ? images[`/src/assets/menu/${product.image}`] : undefined;
-const image = imageLoader ? (await imageLoader()).default : null;
+// Imagen opcional (ruta relativa a src/assets). Si no existe, la tarjeta funciona sin imagen.
+const image = await getAssetImage(product.image);
 ---
 
 <article

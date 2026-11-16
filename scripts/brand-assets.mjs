@@ -20,3 +20,20 @@ await sharp(banner)
   .jpeg({ quality: 82, mozjpeg: true })
   .toFile(`${out}/og.jpg`);
 console.log('Recursos de marca generados en', out);
+
+// Escenas recortadas del banner oficial (ilustración de marca) para artesanías y talleres.
+const scenes = {
+  'taza-hojas': [1030, 430, 360, 250],
+  vela: [1300, 330, 220, 270],
+  'lampara-esencias': [1460, 250, 330, 340],
+  'vasija-ceramica': [1610, 120, 300, 400],
+  macrame: [1550, 0, 280, 260],
+  pinceles: [1860, 40, 173, 380],
+  'matera-hojas': [1240, 150, 250, 210],
+  regalo: [1700, 430, 333, 270],
+  'bodegon-artesanal': [1030, 0, 1003, 774],
+};
+for (const [name, [left, top, width, height]] of Object.entries(scenes)) {
+  await sharp(banner).extract({ left, top, width, height }).jpeg({ quality: 90 }).toFile(`src/assets/scenes/${name}.jpg`);
+}
+console.log('Escenas generadas en src/assets/scenes');

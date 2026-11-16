@@ -1,0 +1,53 @@
+---
+// Granos de café decorativos flotando (imagen: proyecto "Coffee Sun Face", licencia MIT — ver CREDITS.md).
+import { getImage } from 'astro:assets';
+import grano from '@/assets/deco/grano.png';
+
+type Bean = { top: string; left?: string; right?: string; size: number; r: number; blur?: number; opacity?: number; t?: number; dx?: number; dy?: number; depth?: number };
+
+interface Props {
+  beans?: Bean[];
+  class?: string;
+}
+
+const defaults: Bean[] = [
+  { top: '8%', left: '4%', size: 34, r: 20, blur: 1, opacity: 0.7, t: 8, depth: 0.25 },
+  { top: '62%', left: '2%', size: 64, r: -40, blur: 3, opacity: 0.5, t: 11, depth: 0.45 },
+  { top: '18%', right: '44%', size: 22, r: 70, blur: 0, opacity: 0.85, t: 7, depth: 0.15 },
+  { top: '82%', right: '38%', size: 40, r: 130, blur: 2, opacity: 0.6, t: 10, depth: 0.35 },
+  { top: '6%', right: '3%', size: 48, r: -80, blur: 2, opacity: 0.55, t: 12, depth: 0.4 },
+  { top: '48%', right: '1%', size: 28, r: 10, blur: 0, opacity: 0.8, t: 9, depth: 0.2 },
+];
+
+const { beans = defaults, class: className = '' } = Astro.props;
+const img = await getImage({ src: grano, width: 128, format: 'webp' });
+---
+
+<div class:list={['pointer-events-none absolute inset-0 overflow-hidden', className]} aria-hidden="true">
+  {
+    beans.map((b) => (
+      <div
+        class="bean"
+        data-parallax={b.depth ?? 0.2}
+        style={{
+          top: b.top,
+          left: b.left,
+          right: b.right,
+          width: `${b.size}px`,
+          filter: b.blur ? `blur(${b.blur}px)` : undefined,
+          opacity: b.opacity ?? 1,
+        }}
+      >
+        <img
+          src={img.src}
+          alt=""
+          width={b.size}
+          height={Math.round(b.size * 1.06)}
+          loading="lazy"
+          decoding="async"
+          style={`--r:${b.r}deg;--t:${b.t ?? 9}s;--dx:${b.dx ?? 14}px;--dy:${b.dy ?? -36}px`}
+        />
+      </div>
+    ))
+  }
+</div>

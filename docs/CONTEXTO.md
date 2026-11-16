@@ -189,7 +189,7 @@ const product = z.object({
   description: z.string().optional(),
   priceCOP: z.number().int().nonnegative(),
   categoryId: z.string(),
-  image: z.string().nullable().optional(),   // ruta en src/assets/menu/
+  image: z.string().nullable().optional(),   // ruta relativa a src/assets/ (ej. "photos/capuchino.jpg")
   available: z.boolean().default(true),
   featured: z.boolean().default(false),
   sortOrder: z.number().int(),

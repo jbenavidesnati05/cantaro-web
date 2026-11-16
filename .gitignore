@@ -7,3 +7,9 @@ dist/
 .DS_Store
 .vscode/*
 !.vscode/extensions.json
+
+# Proyectos de referencia (código de terceros; no forman parte del sitio)
+coffee-main/
+coffee-shop-landing-page-main/
+starbucks-3d-animated-site-main/
+cantaro-pack/

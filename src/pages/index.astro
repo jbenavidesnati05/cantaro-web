@@ -2,7 +2,7 @@
 import PageLayout from '@/layouts/PageLayout.astro';
 import Hero from '@/components/home/Hero.astro';
 import Marquee from '@/components/home/Marquee.astro';
-import PillarsBento from '@/components/home/PillarsBento.astro';
+import PourStory from '@/components/home/PourStory.astro';
 import FeaturedMenu from '@/components/home/FeaturedMenu.astro';
 import Story from '@/components/home/Story.astro';
 import CraftsPreview from '@/components/home/CraftsPreview.astro';
@@ -56,7 +56,7 @@ const jsonLd = {
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <Hero nextWorkshop={workshops[0]} />
   <Marquee />
-  <PillarsBento />
+  <PourStory />
   <FeaturedMenu />
   <Story />
   <CraftsPreview />
@@ -64,3 +64,7 @@ const jsonLd = {
   <Faq />
   <Visit />
 </PageLayout>
+
+<script>
+  import '@/scripts/effects';
+</script>

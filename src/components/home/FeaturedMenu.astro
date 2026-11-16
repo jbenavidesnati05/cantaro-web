@@ -1,18 +1,27 @@
 ---
+import { Image } from 'astro:assets';
 import CategoryIcon from '@/components/brand/CategoryIcon.astro';
 import Icon from '@/components/brand/Icon.astro';
 import SectionHeading from './SectionHeading.astro';
 import { getMenu, getFeatured, displayPrice } from '@/lib/menu';
 import { formatCOP } from '@/lib/format';
+import { getAssetImage } from '@/lib/images';
 
 const [featured, menu] = await Promise.all([getFeatured(4), getMenu()]);
-const iconFor = (categoryId: string) => menu.find((c) => c.id === categoryId)?.icon;
+const items = await Promise.all(
+  featured.map(async (p) => ({
+    p,
+    img: await getAssetImage(p.image),
+    icon: menu.find((c) => c.id === p.categoryId)?.icon,
+    category: menu.find((c) => c.id === p.categoryId)?.name,
+  })),
+);
 const tints = ['bg-clay-500/15 text-clay-600', 'bg-leaf-500/15 text-olive-700', 'bg-olive-900 text-cream-50', 'bg-clay-300/40 text-bark-800'];
 ---
 
 {
-  featured.length > 0 && (
-    <section class="bg-cream-100/70 py-20 sm:py-28" aria-labelledby="carta-title">
+  items.length > 0 && (
+    <section class="relative overflow-hidden bg-cream-100/70 pt-20 pb-24 sm:pt-28" aria-labelledby="carta-title">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <SectionHeading
@@ -20,7 +29,7 @@ const tints = ['bg-clay-500/15 text-clay-600', 'bg-leaf-500/15 text-olive-700', 
             eyebrow="La carta"
             title="Recomendados de la casa"
             highlight="la casa"
-            intro="Algunos de nuestros favoritos. La carta completa está en cada mesa y aquí mismo."
+            intro="Algunos de nuestros favoritos. La carta completa está en el QR de cada mesa y aquí mismo."
           />
           <a
             href="/menu"
@@ -31,22 +40,37 @@ const tints = ['bg-clay-500/15 text-clay-600', 'bg-leaf-500/15 text-olive-700', 
           </a>
         </div>
 
-        <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {featured.map((p, i) => {
+        <ul class="mt-24 grid gap-x-5 gap-y-24 sm:grid-cols-2 lg:grid-cols-4">
+          {items.map(({ p, img, icon, category }, i) => {
             const price = displayPrice(p);
             return (
               <li class="reveal">
                 <a
                   href={`/menu#${p.categoryId}`}
-                  class="group flex h-full flex-col rounded-[2rem] bg-paper p-6 shadow-[0_18px_40px_-28px_rgb(91_58_33/0.5)] ring-1 ring-bark-800/5 transition duration-300 hover:-translate-y-1.5"
+                  class="group relative flex h-full flex-col items-center rounded-[2rem] bg-paper px-6 pt-0 pb-7 text-center shadow-[0_24px_50px_-34px_rgb(91_58_33/0.6)] ring-1 ring-bark-800/5 transition duration-500 hover:-translate-y-2 hover:shadow-[0_34px_60px_-30px_rgb(91_58_33/0.6)]"
                 >
-                  <span class:list={['grid size-16 place-items-center rounded-[1.25rem] transition-transform duration-300 group-hover:-rotate-6', tints[i % tints.length]]}>
-                    <CategoryIcon name={iconFor(p.categoryId)} size={30} />
+                  {/* Foto que sobresale de la tarjeta */}
+                  <span class="relative -mt-16 mb-5 grid size-36 place-items-center">
+                    <span class="absolute inset-2 rounded-full bg-clay-300/40 blur-xl transition duration-500 group-hover:bg-clay-500/40" aria-hidden="true" />
+                    {img ? (
+                      <Image
+                        src={img}
+                        alt={p.name}
+                        width={288}
+                        height={288}
+                        class="relative size-36 rounded-full object-cover shadow-xl ring-8 ring-paper transition duration-700 group-hover:scale-105 group-hover:rotate-6"
+                      />
+                    ) : (
+                      <span class:list={['relative grid size-36 place-items-center rounded-full shadow-xl ring-8 ring-paper transition duration-700 group-hover:rotate-6', tints[i % tints.length]]}>
+                        <CategoryIcon name={icon} size={52} />
+                      </span>
+                    )}
                   </span>
-                  <h3 class="mt-6 text-2xl leading-tight font-medium">{p.name}</h3>
+                  {category && <span class="text-xs font-semibold tracking-[0.16em] text-clay-600 uppercase">{category}</span>}
+                  <h3 class="mt-2 text-2xl leading-tight font-medium">{p.name}</h3>
                   {p.description && <p class="mt-2 flex-1 text-bark-600">{p.description}</p>}
-                  <p class="mt-5 text-lg font-semibold text-clay-600">
-                    {price.from && <span class="mr-1 text-sm font-normal text-bark-600">desde</span>}
+                  <p class="mt-5 inline-flex items-center gap-2 rounded-full bg-cream-100 px-4 py-1.5 text-lg font-semibold text-clay-600">
+                    {price.from && <span class="text-sm font-normal text-bark-600">desde</span>}
                     {formatCOP(price.value)}
                   </p>
                 </a>
@@ -54,6 +78,11 @@ const tints = ['bg-clay-500/15 text-clay-600', 'bg-leaf-500/15 text-olive-700', 
             );
           })}
         </ul>
+
+        <p class="reveal mx-auto mt-14 flex max-w-xl items-center justify-center gap-3 rounded-full bg-paper/80 px-5 py-3 text-center text-bark-600 ring-1 ring-bark-800/5">
+          <Icon name="qr-code" size={22} class="shrink-0 text-olive-900" />
+          Escanea el QR de tu mesa, elige con calma y pide en la barra.
+        </p>
       </div>
     </section>
   )

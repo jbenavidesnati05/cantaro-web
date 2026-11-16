@@ -1,0 +1,208 @@
+---
+/**
+ * "Del cántaro a tu taza": escena fija ligada al scroll (técnica tipo secuencia 3D, hecha con SVG propio).
+ * Al bajar, el cántaro se inclina, sirve el café y la taza se llena; el texto recorre los tres pilares.
+ * Variables expuestas por src/scripts/effects.ts: --p, --tilt, --stream, --fill, --steam y data-step.
+ */
+import { Image } from 'astro:assets';
+import Icon from '@/components/brand/Icon.astro';
+import Beans from '@/components/brand/Beans.astro';
+import capuchino from '@/assets/photos/capuchino.jpg';
+import bodegon from '@/assets/scenes/bodegon-artesanal.jpg';
+import pinceles from '@/assets/scenes/pinceles.jpg';
+
+const steps = [
+  {
+    n: '01',
+    eyebrow: 'Café',
+    title: 'Servido como en casa',
+    text: 'Tinto, capuchino, aromáticas y chocolate con queso para el frío del Valle. Siempre con una torta para acompañar.',
+    cta: { href: '/menu', label: 'Ver la carta' },
+    img: capuchino,
+    alt: 'Capuchino con arte latte',
+  },
+  {
+    n: '02',
+    eyebrow: 'Artesanías',
+    title: 'Hecho con las manos',
+    text: 'Velas, esencias, textiles y cerámica en pequeñas cantidades. Llévate un pedacito de Cántaro a tu casa.',
+    cta: { href: '/artesanias', label: 'Ver artesanías' },
+    img: bodegon,
+    alt: 'Bodegón con velas, cerámica pintada y esencias',
+  },
+  {
+    n: '03',
+    eyebrow: 'Talleres',
+    title: 'Aprende creando',
+    text: 'Una vez al mes nos sentamos a crear juntos. No necesitas experiencia: los materiales y algo rico van por nuestra cuenta.',
+    cta: { href: '/talleres', label: 'Ver talleres' },
+    img: pinceles,
+    alt: 'Pinceles en un vaso de madera',
+  },
+];
+---
+
+<section id="descubre" class="pour relative bg-[#2a1a0e] text-cream-50" data-pour data-steps={steps.length} data-step="0" aria-labelledby="pour-title">
+  <div class="pour-stage sticky top-0 flex h-dvh flex-col overflow-hidden">
+    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_70%_55%,rgb(210_101_42/0.28),transparent_70%),radial-gradient(50%_60%_at_10%_10%,rgb(91_58_33/0.6),transparent_70%)]" aria-hidden="true"></div>
+    <Beans
+      beans={[
+        { top: '12%', left: '6%', size: 30, r: 30, blur: 1, opacity: 0.5, t: 9, depth: 0.1 },
+        { top: '78%', left: '44%', size: 52, r: -60, blur: 3, opacity: 0.35, t: 12, depth: 0.2 },
+        { top: '20%', right: '6%', size: 40, r: 110, blur: 2, opacity: 0.45, t: 10, depth: 0.15 },
+      ]}
+    />
+
+    <div class="relative mx-auto grid w-full max-w-6xl flex-1 grid-rows-[auto_1fr] items-center gap-4 px-4 pt-24 pb-8 sm:px-6 lg:grid-cols-2 lg:grid-rows-1 lg:gap-12 lg:pt-20">
+      <div class="lg:order-2">
+        <p class="text-center text-sm font-semibold tracking-[0.18em] text-clay-300 uppercase lg:hidden">Del cántaro a tu taza</p>
+        <!-- Ilustración animada -->
+        <svg viewBox="0 0 400 440" class="pour-svg mx-auto h-[34dvh] w-auto lg:h-[70dvh]" role="img" aria-label="Un cántaro de barro sirviendo café en una taza de cerámica">
+          <defs>
+            <linearGradient id="pour-jar" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0" stop-color="#E9A27A" /><stop offset=".5" stop-color="#D2652A" /><stop offset="1" stop-color="#9E4A1C" />
+            </linearGradient>
+            <clipPath id="pour-cup-in"><path d="M216 302h118v36a53 53 0 0 1-53 53h-12a53 53 0 0 1-53-53z" /></clipPath>
+          </defs>
+
+          <!-- platillo y taza (desplazados a la derecha para no cruzarse con el cántaro) -->
+          <g transform="translate(34 0)">
+            <ellipse cx="275" cy="402" rx="96" ry="12" fill="#D2652A" opacity=".9" />
+            <ellipse cx="275" cy="398" rx="78" ry="7" fill="#9E4A1C" />
+            <path d="M340 316h12a22 22 0 0 1 0 44h-14" fill="none" stroke="#F1E2C8" stroke-width="10" />
+            <path d="M210 296h130v42a59 59 0 0 1-59 59h-12a59 59 0 0 1-59-59z" fill="#FFFDF8" />
+            <g clip-path="url(#pour-cup-in)">
+              <rect class="pour-fill" x="200" y="300" width="150" height="100" fill="#5B3A21" />
+              <rect class="pour-fill" x="200" y="300" width="150" height="6" fill="#C98A5B" />
+            </g>
+            <!-- banda de hojas pintadas -->
+            <g fill="#6E9E2E">
+              <path d="M232 362c5-7 12-7 15 0-5 7-12 7-15 0z" />
+              <path d="M258 366c5-7 12-7 15 0-5 7-12 7-15 0z" />
+              <path d="M284 366c5-7 12-7 15 0-5 7-12 7-15 0z" />
+              <path d="M310 362c5-7 12-7 15 0-5 7-12 7-15 0z" />
+            </g>
+            <path d="M218 352c40 10 86 10 124 0" stroke="#D2652A" stroke-width="2" fill="none" opacity=".5" />
+            <ellipse cx="275" cy="298" rx="65" ry="7" fill="none" stroke="#F1E2C8" stroke-width="4" />
+
+            <!-- vapor -->
+            <g class="pour-steam" fill="none" stroke="#E9A27A" stroke-width="5" stroke-linecap="round">
+              <path d="M258 280c-12-16 10-24 0-42s10-22 4-36" />
+              <path d="M290 282c-10-14 8-22 0-38s8-18 3-30" />
+            </g>
+          </g>
+
+          <!-- chorro -->
+          <path class="pour-stream" d="M196 168c40 4 80 40 86 126" fill="none" stroke="#6B4226" stroke-width="10" stroke-linecap="round" pathLength="1" />
+
+          <!-- cántaro (gira sobre el borde de la boca) -->
+          <g class="pour-jar">
+            <path d="M84 192c-46 0-48 70-14 82" fill="none" stroke="#9E4A1C" stroke-width="13" stroke-linecap="round" />
+            <path d="M120 172c-2 13-10 20-20 33-30 35-28 95 10 123 22 16 58 16 80 0 38-28 40-88 10-123-10-13-18-20-20-33z" fill="url(#pour-jar)" />
+            <path d="M93 262c30 10 74 10 104 0v18c-30 10-74 10-104 0z" fill="#F8EEDD" opacity=".9" />
+            <g fill="#D2652A"><path d="M112 272c4-6 10-6 13 0-4 6-10 6-13 0z" /><path d="M140 274c4-6 10-6 13 0-4 6-10 6-13 0z" /><path d="M168 272c4-6 10-6 13 0-4 6-10 6-13 0z" /></g>
+            <ellipse cx="150" cy="171" rx="38" ry="9" fill="#5B3A21" />
+            <ellipse cx="150" cy="169" rx="30" ry="5" fill="#7A5A40" />
+            <path d="M108 222c-10 14-14 30-12 46" fill="none" stroke="#FFFDF8" stroke-width="6" stroke-linecap="round" opacity=".35" />
+            <path d="M200 196c22-24 48-22 56-18-4 22-28 38-56 18z" fill="#6E9E2E" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="relative self-start lg:self-center">
+        <p class="hidden text-sm font-semibold tracking-[0.18em] text-clay-300 uppercase lg:block">Del cántaro a tu taza</p>
+        <h2 id="pour-title" class="sr-only">Lo que encuentras en Cántaro</h2>
+        <div class="pour-steps relative mt-2 grid lg:mt-6">
+          {
+            steps.map((s, i) => (
+              <article class={`pour-step step-${i} [grid-area:1/1]`}>
+                <div class="flex items-center gap-4">
+                  <span class="font-display text-5xl text-clay-300/60 lg:text-6xl">{s.n}</span>
+                  <span class="size-14 shrink-0 overflow-hidden rounded-full ring-4 ring-white/10 lg:size-16">
+                    <Image src={s.img} alt={s.alt} width={128} height={128} class="size-full object-cover" />
+                  </span>
+                  <span class="text-sm font-semibold tracking-[0.18em] text-clay-300 uppercase">{s.eyebrow}</span>
+                </div>
+                <h3 class="mt-4 text-[clamp(2.25rem,1.6rem+3vw,4.25rem)] leading-[1] font-medium text-cream-50">{s.title}</h3>
+                <p class="mt-4 max-w-md text-lg leading-relaxed text-cream-100/80">{s.text}</p>
+                <a href={s.cta.href} class="group mt-6 inline-flex min-h-12 items-center gap-2 rounded-full bg-clay-500 px-6 font-semibold text-cream-50 transition hover:bg-clay-600">
+                  {s.cta.label}
+                  <Icon name="arrow-right" size={18} class="transition-transform group-hover:translate-x-1" />
+                </a>
+              </article>
+            ))
+          }
+        </div>
+        <!-- progreso -->
+        <div class="mt-8 hidden h-1 w-48 overflow-hidden rounded-full bg-white/10 sm:block" aria-hidden="true">
+          <div class="h-full origin-left rounded-full bg-clay-300" style="transform: scaleX(var(--p, 0))"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pour {
+    --tilt: 0;
+    --stream: 0;
+    --fill: 0;
+    --steam: 0;
+    height: 320vh;
+  }
+  .pour-jar {
+    transform-box: view-box;
+    transform-origin: 188px 171px;
+    transform: rotate(calc(var(--tilt) * 62deg));
+  }
+  .pour-stream {
+    stroke-dasharray: 1;
+    stroke-dashoffset: calc(1 - var(--stream));
+    opacity: min(1, calc(var(--stream) * 4));
+  }
+  .pour-fill {
+    transform: translateY(calc((1 - var(--fill)) * 96px));
+  }
+  .pour-steam {
+    opacity: var(--steam);
+  }
+  .pour-step {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(28px);
+    transition:
+      opacity 0.5s ease,
+      transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+      visibility 0.5s;
+  }
+  .pour[data-step='0'] .step-0,
+  .pour[data-step='1'] .step-1,
+  .pour[data-step='2'] .step-2 {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  /* Sin movimiento: escena final estática y los tres pilares visibles */
+  @media (prefers-reduced-motion: reduce) {
+    .pour {
+      height: auto;
+      --tilt: 1;
+      --fill: 1;
+      --steam: 1;
+    }
+    .pour-stage {
+      position: relative;
+      height: auto;
+    }
+    .pour-steps {
+      gap: 3rem;
+    }
+    .pour-step {
+      grid-area: auto !important;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+  }
+</style>

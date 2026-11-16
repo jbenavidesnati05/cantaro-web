@@ -10,6 +10,8 @@ El contexto completo de negocio, diseño y alcance está en **`docs/CONTEXTO.md`
 - **Paleta:** se agrega `leaf-500` (verde hoja del logo) como acento.
 - **Supuestos en vez de huecos:** el dueño prefiere textos y datos de ejemplo verosímiles (horarios, dirección, WhatsApp, carta, taller) en lugar de bloques vacíos. Todo dato supuesto va **marcado en código** (`demo: true` en productos, comentario `// SUPUESTO` en `business.ts`) y listado en el README para reemplazarlo antes de publicar. Mientras se trabaja en local, los `demo` se muestran; la variable `PUBLIC_SHOW_DEMO` controla si se muestran en build.
 - **Alcance:** el sitio es una landing completa del negocio; `/menu` es una sección más (la del QR). Fase 1 incluye `/`, `/menu`, `/artesanias`, `/talleres`, `/contacto` y `/404`. Artesanías y talleres viven en `src/content/{artesanias,talleres}/` y se leen vía `src/lib/catalog.ts`; preguntas frecuentes en `src/data/faq.ts`.
+- **Imágenes provisionales (16 nov 2026):** se permiten fotos con licencia libre (Unsplash) de producto/detalle —nunca de personas, fachadas ni interiores que parezcan el local— y recortes del banner de marca (`src/assets/scenes/`). Toda imagen de terceros se registra en `CREDITS.md`. Prohibido usar recursos de los proyectos de referencia sin licencia (p. ej. el sitio con marca Starbucks).
+- **Efectos:** `src/scripts/effects.ts` (sin dependencias): texto letra por letra, parallax, escena del cántaro ligada al scroll, historia con imagen fija. No agregar GSAP/Lenis; todo respeta `prefers-reduced-motion`.
 - **Trabajo en `main`.** Primero todo en local; el despliegue a Cloudflare Pages se hace después.
 
 ## Objetivo actual (fase 1)
