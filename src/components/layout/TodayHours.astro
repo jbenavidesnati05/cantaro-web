@@ -1,0 +1,82 @@
+---
+/**
+ * Horario de hoy. El sitio es estático: el HTML trae la semana completa y un script mínimo
+ * (en el navegador, zona America/Bogota) muestra el día de hoy y si está abierto.
+ */
+import { business, type DayKey } from '@/data/business';
+import { DAY_LABELS, DAY_ORDER, formatHours, groupedHours } from '@/lib/schedule';
+
+interface Props {
+  class?: string;
+  /** Mostrar la semana completa debajo (desplegable). */
+  showWeek?: boolean;
+}
+const { class: className, showWeek = true } = Astro.props;
+const hours = business.hours;
+
+const days = hours
+  ? Object.fromEntries(
+      DAY_ORDER.map((d) => [
+        d,
+        { label: DAY_LABELS[d], text: formatHours(hours[d]), open: hours[d]?.open ?? null, close: hours[d]?.close ?? null },
+      ]),
+    ) as Record<DayKey, { label: string; text: string; open: string | null; close: string | null }>
+  : null;
+---
+
+{
+  days && hours && (
+    <div class={className} data-today-hours data-days={JSON.stringify(days)} data-tz={business.timezone}>
+      <p>
+        <span class="font-medium" data-today-label>
+          Horario
+        </span>
+        <span data-today-text />
+        <span data-today-status class="ml-1 inline-block rounded-full px-2 py-0.5 text-xs font-semibold empty:hidden" />
+      </p>
+      {showWeek && (
+        <details class="mt-1 group">
+          <summary class="inline-flex min-h-11 cursor-pointer items-center text-sm underline decoration-dotted underline-offset-4">
+            Ver horario de la semana
+          </summary>
+          <ul class="mt-1 space-y-0.5 text-sm">
+            {groupedHours(hours).map((g) => (
+              <li>
+                <span class="font-medium">{g.days}:</span> {g.hours}
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+    </div>
+  )
+}
+
+<script>
+  type Day = { label: string; text: string; open: string | null; close: string | null };
+  for (const el of document.querySelectorAll<HTMLElement>('[data-today-hours]')) {
+    const days = JSON.parse(el.dataset.days ?? '{}') as Record<string, Day>;
+    const tz = el.dataset.tz ?? 'America/Bogota';
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz,
+      weekday: 'short',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+    }).formatToParts(new Date());
+    const get = (t: string) => parts.find((p) => p.type === t)?.value ?? '';
+    const key = get('weekday').toLowerCase().slice(0, 3);
+    const now = `${get('hour')}:${get('minute')}`;
+    const today = days[key];
+    if (!today) continue;
+
+    el.querySelector('[data-today-label]')!.textContent = `Hoy, ${today.label.toLowerCase()}: `;
+    el.querySelector('[data-today-text]')!.textContent = today.text;
+
+    const status = el.querySelector<HTMLElement>('[data-today-status]')!;
+    if (today.open === null) continue; // "Cerrado" todo el día: no repetir el estado.
+    const isOpen = today.open !== null && today.close !== null && now >= today.open && now < today.close;
+    status.textContent = isOpen ? 'Abierto ahora' : 'Cerrado ahora';
+    status.classList.add(...(isOpen ? ['bg-leaf-500/20', 'text-olive-900'] : ['bg-stone-400/20', 'text-bark-600']));
+  }
+</script>

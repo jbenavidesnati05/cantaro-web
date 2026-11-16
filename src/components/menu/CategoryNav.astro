@@ -1,0 +1,102 @@
+---
+import CategoryIcon from '@/components/brand/CategoryIcon.astro';
+import type { MenuSection } from '@/lib/menu';
+
+interface Props {
+  sections: MenuSection[];
+}
+const { sections } = Astro.props;
+---
+
+<nav
+  aria-label="Categorías de la carta"
+  class="sticky top-0 z-20 border-b border-bark-800/10 bg-cream-50/90 backdrop-blur-md supports-[not(backdrop-filter:blur(1px))]:bg-cream-50"
+  data-cat-nav
+>
+  <ul
+    class="no-scrollbar mx-auto flex max-w-2xl snap-x scroll-px-4 gap-2 overflow-x-auto px-4 py-2.5 [mask-image:linear-gradient(to_right,transparent,#000_1rem,#000_calc(100%-1.5rem),transparent)]"
+    data-cat-scroller
+  >
+    {
+      sections.map((s) => (
+        <li class="snap-start">
+          <a
+            href={`#${s.id}`}
+            data-cat-link
+            class="flex min-h-11 items-center gap-1.5 rounded-full bg-paper px-4 text-[0.95rem] font-medium whitespace-nowrap text-bark-800 ring-1 ring-bark-800/10 transition-colors hover:bg-cream-100 aria-[current=true]:bg-olive-900 aria-[current=true]:text-cream-50 aria-[current=true]:ring-olive-900"
+          >
+            <CategoryIcon name={s.icon} size={18} />
+            {s.name}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<script>
+  // Scroll-spy ligero: resalta la categoría visible y centra su chip en la barra.
+  const nav = document.querySelector<HTMLElement>('[data-cat-nav]');
+  const scroller = document.querySelector<HTMLElement>('[data-cat-scroller]');
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-cat-link]')];
+  const sections = links
+    .map((l) => document.getElementById(decodeURIComponent(l.hash.slice(1))))
+    .filter((s): s is HTMLElement => s !== null);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let current = '';
+
+  function setActive(id: string) {
+    if (id === current) return;
+    current = id;
+    for (const link of links) {
+      const on = link.hash === `#${id}`;
+      if (on) {
+        link.setAttribute('aria-current', 'true');
+        if (scroller) {
+          const left = link.offsetLeft - (scroller.clientWidth - link.offsetWidth) / 2;
+          scroller.scrollTo({ left, behavior: reduce ? 'auto' : 'smooth' });
+        }
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    }
+  }
+
+  function update() {
+    const offset = (nav?.offsetHeight ?? 0) + 24;
+    let active = sections[0]?.id ?? '';
+    for (const s of sections) {
+      if (s.getBoundingClientRect().top - offset <= 0) active = s.id;
+    }
+    // Al llegar al final de la página, activar la última categoría.
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) {
+      active = sections.at(-1)?.id ?? active;
+    }
+    setActive(active);
+  }
+
+  let ticking = false;
+  addEventListener(
+    'scroll',
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        update();
+        ticking = false;
+      });
+    },
+    { passive: true },
+  );
+  for (const link of links) link.addEventListener('click', () => setActive(link.hash.slice(1)));
+  update();
+</script>

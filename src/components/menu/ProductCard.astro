@@ -1,0 +1,82 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Badge from './Badge.astro';
+import PriceTag from './PriceTag.astro';
+import { displayPrice, type Product } from '@/lib/menu';
+
+interface Props {
+  product: Product;
+}
+const { product } = Astro.props;
+const soldOut = !product.available;
+const price = displayPrice(product);
+const hasVariants = (product.variants?.length ?? 0) > 0;
+
+// Imágenes opcionales en src/assets/menu/<archivo>. Si no existe, la tarjeta funciona sin imagen.
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/menu/*.{jpg,jpeg,png,webp,avif}');
+const imageLoader = product.image ? images[`/src/assets/menu/${product.image}`] : undefined;
+const image = imageLoader ? (await imageLoader()).default : null;
+---
+
+<article
+  class:list={[
+    'flex gap-4 rounded-2xl bg-paper p-4 shadow-[0_1px_0_rgb(91_58_33/0.06),0_8px_24px_-12px_rgb(91_58_33/0.18)] ring-1 ring-bark-800/5',
+    soldOut && 'opacity-70',
+  ]}
+  aria-label={soldOut ? `${product.name} (agotado)` : undefined}
+>
+  {
+    image && (
+      <Image
+        src={image}
+        alt={product.name}
+        width={96}
+        height={96}
+        densities={[1, 2]}
+        loading="lazy"
+        class:list={['size-24 shrink-0 rounded-xl object-cover', soldOut && 'grayscale']}
+      />
+    )
+  }
+  <div class="min-w-0 flex-1">
+    <div class="flex items-start justify-between gap-3">
+      <h3 class="text-xl leading-snug font-medium">{product.name}</h3>
+      {/* Con variantes y precio base 0, los precios se ven en la lista de variantes. */}
+      {!price.from && <PriceTag value={price.value} muted={soldOut} />}
+    </div>
+
+    {
+      (product.featured || soldOut) && (
+        <div class="mt-1.5 flex flex-wrap gap-1.5">
+          {product.featured && !soldOut && <Badge variant="featured" />}
+          {soldOut && <Badge variant="soldout" />}
+        </div>
+      )
+    }
+
+    {product.description && <p class="mt-1.5 leading-relaxed text-bark-600">{product.description}</p>}
+
+    {
+      hasVariants && (
+        <ul class="mt-3 space-y-1.5 border-t border-dashed border-bark-800/15 pt-3">
+          {product.variants?.map((v) => (
+            <li class="flex items-baseline gap-2">
+              <span>{v.name}</span>
+              <span class="flex-1 translate-y-[-3px] border-b border-dotted border-bark-800/25" aria-hidden="true" />
+              <PriceTag value={v.priceCOP} size="sm" muted={soldOut} />
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      product.allergens && product.allergens.length > 0 && (
+        <p class="mt-2 text-sm text-bark-600">
+          <span class="font-medium">Contiene:</span> {product.allergens.join(', ')}
+        </p>
+      )
+    }
+  </div>
+</article>

@@ -1,0 +1,21 @@
+---
+interface Props {
+  variant: 'featured' | 'soldout';
+}
+const { variant } = Astro.props;
+const styles = {
+  featured: 'bg-clay-500/12 text-clay-600 ring-clay-500/30',
+  soldout: 'bg-stone-400/15 text-bark-600 ring-stone-400/40',
+};
+const labels = { featured: 'Recomendado', soldout: 'Agotado' };
+---
+
+<span
+  class:list={[
+    'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide uppercase ring-1 ring-inset',
+    styles[variant],
+  ]}
+>
+  {variant === 'featured' && <span aria-hidden="true">★</span>}
+  {labels[variant]}
+</span>

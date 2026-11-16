@@ -1,0 +1,27 @@
+---
+import { formatCOP } from '@/lib/format';
+
+interface Props {
+  value: number;
+  from?: boolean;
+  muted?: boolean;
+  size?: 'lg' | 'sm';
+}
+const { value, from = false, muted = false, size = 'lg' } = Astro.props;
+const price = formatCOP(value);
+---
+
+{
+  price && (
+    <span
+      class:list={[
+        'shrink-0 font-semibold whitespace-nowrap tabular-nums',
+        size === 'lg' ? 'text-lg' : 'text-base',
+        muted ? 'text-stone-400 line-through decoration-1' : 'text-clay-600',
+      ]}
+    >
+      {from && <span class="mr-1 text-sm font-normal text-bark-600 no-underline">desde</span>}
+      {price}
+    </span>
+  )
+}

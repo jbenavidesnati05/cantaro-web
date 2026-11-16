@@ -1,6 +1,7 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/fraunces/full.css';
-@import '@fontsource-variable/fraunces/full-italic.css';
+/* Fraunces con ejes wght + SOFT (62 KB vs 121 KB de "full"); la itálica solo se descarga si se usa. */
+@import '@fontsource-variable/fraunces/soft.css';
+@import '@fontsource-variable/fraunces/soft-italic.css';
 @import '@fontsource-variable/inter/index.css';
 
 /* ── Tokens de marca (paleta validada contra el logo oficial) ── */
@@ -37,7 +38,7 @@
   }
   h1, h2, h3 {
     @apply font-display text-bark-800;
-    font-variation-settings: 'SOFT' 50, 'WONK' 0;
+    font-variation-settings: 'SOFT' 50;
     text-wrap: balance;
   }
   :focus-visible {

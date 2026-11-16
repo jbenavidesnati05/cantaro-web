@@ -1,0 +1,37 @@
+---
+import CategoryIcon from '@/components/brand/CategoryIcon.astro';
+import ProductCard from './ProductCard.astro';
+import EmptyState from './EmptyState.astro';
+import type { MenuSection } from '@/lib/menu';
+
+interface Props {
+  section: MenuSection;
+}
+const { section } = Astro.props;
+---
+
+<section id={section.id} aria-labelledby={`${section.id}-title`} class="scroll-mt-24">
+  <div class="mb-4 flex items-center gap-3">
+    <span class="grid size-10 shrink-0 place-items-center rounded-full bg-olive-900 text-cream-50">
+      <CategoryIcon name={section.icon} size={20} />
+    </span>
+    <div>
+      <h2 id={`${section.id}-title`} class="text-2xl leading-tight font-semibold">{section.name}</h2>
+      {section.description && <p class="text-[0.95rem] text-bark-600">{section.description}</p>}
+    </div>
+  </div>
+
+  {
+    section.products.length > 0 ? (
+      <ul class="space-y-3">
+        {section.products.map((p) => (
+          <li>
+            <ProductCard product={p} />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <EmptyState />
+    )
+  }
+</section>
