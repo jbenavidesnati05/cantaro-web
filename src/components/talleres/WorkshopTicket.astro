@@ -3,6 +3,7 @@
 import Icon from '@/components/brand/Icon.astro';
 import { formatCOP, formatDateParts, formatTime } from '@/lib/format';
 import { waLink } from '@/lib/whatsapp';
+import { business } from '@/data/business';
 import type { Workshop } from '@/lib/catalog';
 
 interface Props {
@@ -49,19 +50,16 @@ const wa = waLink(`¡Hola, Cántaro! Quiero reservar un cupo para "${w.title}" d
       )
     }
 
-    {
-      wa && (
-        <a
-          href={wa}
-          target="_blank"
-          rel="noopener"
-          class="mt-6 inline-flex min-h-12 items-center gap-2 rounded-full bg-olive-900 px-6 font-semibold text-cream-50 transition hover:bg-olive-700"
-        >
-          Reservar mi cupo
-          <Icon name="arrow-up-right" size={18} />
-        </a>
-      )
-    }
+    {/* WhatsApp si existe; si no, correo como respaldo */}
+    <a
+      href={wa ?? `mailto:${business.email}?subject=${encodeURIComponent(`Reserva: ${w.title} (${d.full})`)}`}
+      target={wa ? '_blank' : undefined}
+      rel={wa ? 'noopener' : undefined}
+      class="mt-6 inline-flex min-h-12 items-center gap-2 rounded-full bg-olive-900 px-6 font-semibold text-cream-50 transition hover:bg-olive-700"
+    >
+      Reservar mi cupo
+      <Icon name={wa ? 'arrow-up-right' : 'mail'} size={18} />
+    </a>
   </div>
 </article>
 

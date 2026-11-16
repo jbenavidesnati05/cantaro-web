@@ -1,0 +1,13 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  X-Frame-Options: SAMEORIGIN
+
+# Recursos con hash en el nombre: caché de un año
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Íconos e imagen para compartir
+/brand/*
+  Cache-Control: public, max-age=604800
